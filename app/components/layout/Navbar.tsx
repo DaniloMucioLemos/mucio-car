@@ -52,41 +52,46 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-14 md:h-20">
-          <Link href="/" className="flex items-center">
-            <div className="flex items-center">
-              {/* Silhueta do carro */}
-              <div className="relative">
-                <svg 
-                  width="24" 
-                  height="14" 
-                  viewBox="0 0 100 60" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  role="img" 
-                  aria-label="Logo Mucio Car"
-                  className="md:w-[50px] md:h-[30px]"
-                >
-                  <path 
-                    d="M5,40 C15,20 30,15 40,15 C60,15 70,25 85,25 C95,25 95,35 95,40 C95,45 90,45 85,45 C75,45 65,35 40,35 C25,35 15,45 10,45 C5,45 0,45 5,40 Z" 
-                    fill="#FFD700" 
-                    stroke="#FFD700" 
-                    strokeWidth="2"
-                  />
-                </svg>
-              </div>
-              
-              <div className="hidden md:flex flex-col ml-2">
-                <div className="flex items-center">
-                  <span className="text-white font-stencil text-xl tracking-wider">MUCIO</span>
-                  <span className="text-accent font-stencil text-xl tracking-wider">CAR</span>
+          {/* Logo - visível apenas em desktop */}
+          <div className="hidden md:block">
+            <Link href="/" className="flex items-center">
+              <div className="flex items-center">
+                {/* Silhueta do carro */}
+                <div className="relative">
+                  <svg 
+                    width="50" 
+                    height="30" 
+                    viewBox="0 0 100 60" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    role="img" 
+                    aria-label="Logo Mucio Car"
+                  >
+                    <path 
+                      d="M5,40 C15,20 30,15 40,15 C60,15 70,25 85,25 C95,25 95,35 95,40 C95,45 90,45 85,45 C75,45 65,35 40,35 C25,35 15,45 10,45 C5,45 0,45 5,40 Z" 
+                      fill="#FFD700" 
+                      stroke="#FFD700" 
+                      strokeWidth="2"
+                    />
+                  </svg>
                 </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-secondary font-sans text-[8px] uppercase tracking-wider">ESTÉTICA</span>
-                  <span className="text-secondary font-sans text-[8px] uppercase tracking-wider">AUTOMOTIVA</span>
+                
+                <div className="flex flex-col ml-2">
+                  <div className="flex items-center">
+                    <span className="text-white font-stencil text-xl tracking-wider">MUCIO</span>
+                    <span className="text-accent font-stencil text-xl tracking-wider">CAR</span>
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="text-secondary font-sans text-[8px] uppercase tracking-wider">ESTÉTICA</span>
+                    <span className="text-secondary font-sans text-[8px] uppercase tracking-wider">AUTOMOTIVA</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
+          
+          {/* Espaço vazio para manter o layout na versão mobile */}
+          <div className="md:hidden"></div>
 
           {/* Botão do menu mobile */}
           <button
