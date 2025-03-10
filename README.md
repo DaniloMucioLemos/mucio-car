@@ -27,18 +27,6 @@ Site institucional desenvolvido para a Mucio Car, especialista em estética auto
 - **Git** - Sistema de controle de versão
 - **npm** - Gerenciador de pacotes
 
-## 📦 Estrutura do Projeto
-
-```
-muciocar/
-├── app/
-│   ├── components/     # Componentes reutilizáveis
-│   ├── data/          # Dados estáticos
-│   ├── services/      # Serviços e integrações
-│   └── styles/        # Estilos globais
-├── public/            # Arquivos estáticos
-└── prisma/           # Configurações do banco de dados
-```
 
 ## 🎨 Design
 
@@ -49,24 +37,6 @@ O design do site foi desenvolvido com foco em:
 - Elementos visuais que remetem ao universo automotivo
 - Interface intuitiva e agradável
 
-## 🔧 Instalação e Uso
-
-1. Clone o repositório:
-```bash
-git clone https://github.com/DaniloMucio/Mucio-Car.git
-```
-
-2. Instale as dependências:
-```bash
-npm install
-```
-
-3. Execute o projeto em modo de desenvolvimento:
-```bash
-npm run dev
-```
-
-4. Acesse http://localhost:3000 no seu navegador
 
 ## 📱 Responsividade
 
@@ -74,13 +44,6 @@ O site é totalmente responsivo, adaptando-se aos seguintes breakpoints:
 - Mobile: 320px - 767px
 - Tablet: 768px - 1023px
 - Desktop: 1024px+
-
-## 🔒 Segurança
-
-- Proteção contra XSS
-- Headers de segurança configurados
-- Sanitização de inputs
-- Validação de formulários
 
 ## 📈 Performance
 
@@ -90,12 +53,6 @@ O site é totalmente responsivo, adaptando-se aos seguintes breakpoints:
 - Caching eficiente
 
 ## 👨‍💻 Desenvolvedor
-
-Desenvolvido por [Danilo Mucio](https://wa.me/5516997452118) - Webdesigner e Programador Web
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Sobre o Projeto
 
@@ -118,6 +75,6 @@ A Mucio Car é uma estética automotiva fundada em 2016 por Bruno Mucio na cidad
 - **Date-fns**: Manipulação de datas
 - **React Calendar**: Componente de calendário
 
-
-
 Desenvolvido com ❤️ para a Mucio Car 
+
+Desenvolvido por [Danilo Mucio](https://wa.me/5516997452118) - Webdesigner e Programador Web

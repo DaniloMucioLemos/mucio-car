@@ -52,13 +52,13 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-14 md:h-20">
-          <Link href="/" className="flex items-center -ml-2 md:ml-0">
+          <Link href="/" className="flex items-center">
             <div className="flex items-center">
               {/* Silhueta do carro */}
               <div className="relative">
                 <svg 
-                  width="28" 
-                  height="16" 
+                  width="24" 
+                  height="14" 
                   viewBox="0 0 100 60" 
                   fill="none" 
                   xmlns="http://www.w3.org/2000/svg" 
@@ -75,7 +75,7 @@ export default function Navbar() {
                 </svg>
               </div>
               
-              <div className="ml-2 hidden md:flex flex-col">
+              <div className="hidden md:flex flex-col ml-2">
                 <div className="flex items-center">
                   <span className="text-white font-stencil text-xl tracking-wider">MUCIO</span>
                   <span className="text-accent font-stencil text-xl tracking-wider">CAR</span>
