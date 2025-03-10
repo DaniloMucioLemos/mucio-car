@@ -1,5 +1,7 @@
 // Serviço para gerenciar depoimentos
 
+import { Testimonial, createTestimonial } from '../models/Testimonial';
+
 // Interface para os depoimentos
 export interface Testimonial {
   id: string;
@@ -16,28 +18,28 @@ export interface Testimonial {
   service?: string;
 }
 
-// Simulação de banco de dados (substituir por banco real)
+// Array simulando um banco de dados
 let testimonials: Testimonial[] = [];
 
-// Funções exportadas individualmente
-export const getApprovedTestimonials = async () => {
-  return testimonials.filter(t => t.status === 'aprovado');
-};
-
-export const getTestimonials = async () => {
+// Função para obter todos os depoimentos
+export const getTestimonials = async (): Promise<Testimonial[]> => {
   return testimonials;
 };
 
-export const addTestimonial = async (testimonial: Omit<Testimonial, 'id' | 'status' | 'date'>) => {
-  const newTestimonial: Testimonial = {
-    ...testimonial,
-    id: Date.now().toString(),
-    status: 'pendente',
-    date: new Date().toLocaleDateString('pt-BR'),
-    isPositive: testimonial.rating >= 3
-  };
-  testimonials.push(newTestimonial);
+// Função para obter apenas os depoimentos aprovados
+export const getApprovedTestimonials = async (): Promise<Testimonial[]> => {
+  return testimonials.filter(t => t.status === 'aprovado');
+};
+
+// Função para adicionar um novo depoimento
+export const addTestimonial = async (name: string, rating: number, comment: string, vehicleModel?: string, service?: string): Promise<Testimonial> => {
+  const newTestimonial = createTestimonial(name, rating, comment, vehicleModel, service);
+  testimonials = [newTestimonial, ...testimonials];
   return newTestimonial;
+};
+
+export const getPendingTestimonials = async () => {
+  return testimonials.filter(t => t.status === 'pendente');
 };
 
 export const updateTestimonialStatus = async (id: string, status: Testimonial['status'], resposta?: string) => {
@@ -57,7 +59,7 @@ export const updateTestimonialStatus = async (id: string, status: Testimonial['s
 export const testimonialService = {
   getAllTestimonials: async () => testimonials,
   getApprovedTestimonials,
-  getPendingTestimonials: async () => testimonials.filter(t => t.status === 'pendente'),
+  getPendingTestimonials,
   addTestimonial,
   updateTestimonialStatus,
   clearData: () => {

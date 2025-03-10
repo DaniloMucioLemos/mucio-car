@@ -7,8 +7,8 @@ import { getTestimonials, addTestimonial as addTestimonialService } from '../ser
 interface TestimonialContextType {
   testimonials: Testimonial[];
   loading: boolean;
-  addTestimonial: (name: string, rating: number, comment: string, vehicleModel?: string, service?: string) => Testimonial;
-  refreshTestimonials: () => void;
+  addTestimonial: (name: string, rating: number, comment: string, vehicleModel?: string, service?: string) => Promise<Testimonial>;
+  refreshTestimonials: () => Promise<void>;
 }
 
 const TestimonialContext = createContext<TestimonialContextType | undefined>(undefined);
@@ -17,10 +17,10 @@ export function TestimonialProvider({ children }: { children: ReactNode }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadTestimonials = () => {
+  const loadTestimonials = async () => {
     try {
       setLoading(true);
-      const loadedTestimonials = getTestimonials();
+      const loadedTestimonials = await getTestimonials();
       setTestimonials(loadedTestimonials);
     } catch (error) {
       console.error('Erro ao carregar depoimentos:', error);
@@ -33,8 +33,8 @@ export function TestimonialProvider({ children }: { children: ReactNode }) {
     loadTestimonials();
   }, []);
 
-  const addTestimonial = (name: string, rating: number, comment: string, vehicleModel?: string, service?: string) => {
-    const newTestimonial = addTestimonialService(name, rating, comment, vehicleModel, service);
+  const addTestimonial = async (name: string, rating: number, comment: string, vehicleModel?: string, service?: string) => {
+    const newTestimonial = await addTestimonialService(name, rating, comment, vehicleModel, service);
     
     // Atualiza o estado local com o novo depoimento
     setTestimonials(prevTestimonials => [newTestimonial, ...prevTestimonials]);
@@ -42,8 +42,8 @@ export function TestimonialProvider({ children }: { children: ReactNode }) {
     return newTestimonial;
   };
 
-  const refreshTestimonials = () => {
-    loadTestimonials();
+  const refreshTestimonials = async () => {
+    await loadTestimonials();
   };
 
   return (

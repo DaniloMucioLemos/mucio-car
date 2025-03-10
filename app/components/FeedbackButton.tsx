@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { addTestimonial as addTestimonialService } from '../services/testimonialService';
+import { addTestimonial } from '../services/testimonialService';
 
 export default function FeedbackButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,20 +25,12 @@ export default function FeedbackButton() {
     setLoading(true);
     
     try {
-      // Adicionar o depoimento diretamente usando o serviço
-      const newTestimonial = await addTestimonialService({
-        name,
-        rating,
-        comment: feedback,
-        vehicleModel,
-        service
-      });
+      // Adicionar o depoimento usando o serviço
+      const newTestimonial = await addTestimonial(name, rating, feedback, vehicleModel, service);
       console.log('Novo depoimento adicionado:', newTestimonial);
       
       // Após o envio bem-sucedido
       setSubmitted(true);
-      
-      // Não recarregar a página, apenas resetar o formulário após o usuário clicar no botão
       
     } catch (error) {
       console.error('Erro ao enviar feedback:', error);
