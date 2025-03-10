@@ -66,7 +66,7 @@ export default function Navbar() {
                 </svg>
               </div>
               
-              <div className="ml-2 flex flex-col">
+              <div className="ml-2 hidden md:flex flex-col">
                 <div className="flex items-center">
                   <span className="text-white font-stencil text-xl tracking-wider">MUCIO</span>
                   <span className="text-accent font-stencil text-xl tracking-wider">CAR</span>
