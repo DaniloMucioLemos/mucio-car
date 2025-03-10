@@ -11,7 +11,6 @@ import FeedbackButton from './components/FeedbackButton';
 import TestimonialCard from './components/TestimonialCard';
 import { getApprovedTestimonials } from './services/testimonialService';
 import Logo from './components/Logo';
-import { getRecentImages } from './services/galleryService';
 import ContactForm from './components/ContactForm';
 import ImageCarousel from './components/ImageCarousel';
 
@@ -75,39 +74,6 @@ export default function Home() {
       sectionObserver.disconnect();
     };
   }, [visibleSections]);
-
-  // Seção de Galeria
-  const GallerySection = () => {
-    return (
-      <div className="relative py-16 bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1583&auto=format&fit=crop)' }}>
-        <div className="absolute inset-0 bg-black bg-opacity-80"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-yellow-500 mb-4 font-serif vintage-text">Nossa Galeria</h2>
-            <p className="text-xl text-light-dark italic mb-6">
-              "Cada veículo conta uma história, nós ajudamos a preservá-la"
-            </p>
-          </div>
-          
-          {/* Conteúdo central */}
-          <div className="vintage-card max-w-3xl mx-auto p-8 text-center">
-            <h3 className="text-2xl font-bold text-yellow-500 mb-6 font-serif">Excelência em Estética Automotiva</h3>
-            <p className="text-light-dark mb-6">
-              Nossa galeria apresenta os melhores trabalhos realizados pela equipe Mucio Car. 
-              Cada projeto é executado com atenção meticulosa aos detalhes, 
-              utilizando produtos premium e técnicas avançadas para garantir resultados excepcionais.
-            </p>
-            <p className="text-light-dark">
-              Visite nossa oficina para conhecer mais sobre nossos serviços de estética automotiva 
-              e ver pessoalmente a qualidade do nosso trabalho.
-            </p>
-          </div>
-          
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-dark text-light">
@@ -262,9 +228,6 @@ export default function Home() {
         </Suspense>
       )}
       
-      {/* Gallery Section */}
-      <GallerySection />
-      
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-dark-light">
         <div className="container mx-auto px-4 md:px-8">
@@ -275,17 +238,17 @@ export default function Home() {
               <div className="vintage-card p-6 mb-8">
                 <h3 className="text-xl font-bold mb-4 text-yellow-500 font-serif">Informações de Contato</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-light-dark">
-              <div className="flex items-start">
+                  <div className="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     <span>Rua Bahia, 2186<br />Araraquara, SP<br />CEP 14.808-653</span>
-              </div>
-              <div className="flex items-start">
+                  </div>
+                  <div className="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 mt-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
                     <span>(16) 99785-5627</span>
                   </div>
                   <div className="flex items-start">
@@ -300,8 +263,8 @@ export default function Home() {
                     </svg>
                     <span>Segunda a Sexta:<br />8h às 18h<br />Sábados:<br />8h às 12h</span>
                   </div>
-              </div>
-              
+                </div>
+                
                 <div className="mt-6 pt-4 border-t border-gray-700">
                   <h4 className="text-lg font-bold mb-3 text-yellow-500 font-serif">Siga-nos</h4>
                   <div className="flex space-x-4">
@@ -323,7 +286,7 @@ export default function Home() {
                     <a href="https://wa.me/5516997855627" target="_blank" rel="noopener noreferrer" className="text-light-dark hover:text-yellow-400 transition-colors">
                       <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fillRule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clipRule="evenodd" />
-                </svg>
+                      </svg>
                     </a>
                   </div>
                 </div>
