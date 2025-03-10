@@ -140,10 +140,10 @@ export default function Navbar() {
 
         {/* Menu Content */}
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
-          <div className="flex flex-col space-y-8">
+          <div className="flex flex-col space-y-4">
             <Link 
               href="/" 
-              className={`relative group py-3 text-2xl ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-2 text-base ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Início</span>
@@ -154,14 +154,14 @@ export default function Navbar() {
                 scrollToSection('services');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-3 text-white text-left text-2xl"
+              className="relative group py-2 text-white text-left text-base"
             >
               <span>Serviços</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
             <Link 
               href="/galeria" 
-              className={`relative group py-3 text-2xl ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-2 text-base ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Galeria</span>
@@ -172,22 +172,24 @@ export default function Navbar() {
                 scrollToSection('contact');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-3 text-white text-left text-2xl"
+              className="relative group py-2 text-white text-left text-base"
             >
               <span>Contato</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
-            <Link 
-              href="/agendamento" 
-              className={`px-8 py-4 rounded-md border border-yellow-500 transition-all duration-300 text-center text-xl mt-4 ${
-                pathname === '/agendamento' 
-                  ? 'bg-yellow-500 text-dark font-medium' 
-                  : 'text-yellow-500 hover:bg-yellow-500 hover:text-dark'
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Agendar
-            </Link>
+            <div className="mt-6">
+              <Link 
+                href="/agendamento" 
+                className={`block w-full px-6 py-3 rounded-md border border-yellow-500 transition-all duration-300 text-center text-base font-medium ${
+                  pathname === '/agendamento' 
+                    ? 'bg-yellow-500 text-dark' 
+                    : 'text-yellow-500 hover:bg-yellow-500 hover:text-dark'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Agendar
+              </Link>
+            </div>
           </div>
         </div>
       </div>
