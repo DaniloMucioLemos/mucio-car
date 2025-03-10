@@ -1,10 +1,14 @@
 export interface Testimonial {
   id: string;
   name: string;
-  rating: number;
   comment: string;
+  rating: number;
   date: string;
-  isPositive: boolean;
+  foto?: string;
+  status: 'pendente' | 'aprovado' | 'rejeitado';
+  response?: string;
+  responseDate?: string;
+  isPositive?: boolean;
   vehicleModel?: string;
   service?: string;
 }
@@ -21,12 +25,7 @@ export const generateId = (): string => {
 
 // Função para formatar a data atual
 export const formatCurrentDate = (): string => {
-  const now = new Date();
-  return now.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+  return new Date().toLocaleDateString('pt-BR');
 };
 
 // Função para criar um novo depoimento
@@ -43,6 +42,7 @@ export const createTestimonial = (
     rating,
     comment,
     date: formatCurrentDate(),
+    status: 'pendente',
     isPositive: isPositiveRating(rating),
     vehicleModel,
     service

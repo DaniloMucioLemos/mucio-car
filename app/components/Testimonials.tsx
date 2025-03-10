@@ -19,8 +19,11 @@ export default function Testimonials() {
         const allTestimonials = await getTestimonials();
         console.log('Todos os depoimentos carregados:', allTestimonials);
         
+        // Filtrar apenas depoimentos aprovados
+        const approvedTestimonials = allTestimonials.filter(t => t.status === 'aprovado');
+        
         // Ordenar por data (mais recentes primeiro)
-        const sortedTestimonials = [...allTestimonials].sort((a, b) => {
+        const sortedTestimonials = [...approvedTestimonials].sort((a, b) => {
           // Converter datas no formato DD/MM/YYYY para objetos Date
           const [dayA, monthA, yearA] = a.date.split('/').map(Number);
           const [dayB, monthB, yearB] = b.date.split('/').map(Number);
@@ -88,8 +91,10 @@ export default function Testimonials() {
   }
 
   // Renderizar avatar baseado na avaliação
-  const renderAvatar = (isPositive: boolean, name: string) => {
+  const renderAvatar = (rating: number, name: string) => {
     // Avaliação positiva (3 ou mais estrelas)
+    const isPositive = rating >= 3;
+    
     if (isPositive) {
       return (
         <div className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl">
@@ -133,7 +138,7 @@ export default function Testimonials() {
             {depoimentos.map(depoimento => (
               <div key={depoimento.id} className="vintage-card hover:shadow-lg transition-shadow">
                 <div className="flex items-center mb-4">
-                  {renderAvatar(depoimento.isPositive, depoimento.name)}
+                  {renderAvatar(depoimento.rating, depoimento.name)}
                   <div className="ml-4">
                     <h3 className="font-bold text-lg text-gold-DEFAULT">{depoimento.name || 'Cliente'}</h3>
                     <div className="flex">
