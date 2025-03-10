@@ -2,22 +2,6 @@
 
 import { Testimonial, createTestimonial } from '../models/Testimonial';
 
-// Interface para os depoimentos
-export interface Testimonial {
-  id: string;
-  name: string;
-  comment: string;
-  rating: number;
-  date: string;
-  foto?: string;
-  status: 'pendente' | 'aprovado' | 'rejeitado';
-  response?: string;
-  responseDate?: string;
-  isPositive?: boolean;
-  vehicleModel?: string;
-  service?: string;
-}
-
 // Array simulando um banco de dados
 let testimonials: Testimonial[] = [];
 
