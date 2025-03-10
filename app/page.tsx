@@ -316,6 +316,17 @@ export default function Home() {
       
       <FeedbackButton />
       
+      {/* Link Administrativo */}
+      <div className="fixed bottom-4 right-4">
+        <a 
+          href="/admin" 
+          className="text-xs text-gray-500 hover:text-yellow-500 transition-colors"
+          title="Acesso Administrativo"
+        >
+          Admin
+        </a>
+      </div>
+      
     </div>
   );
 } 
