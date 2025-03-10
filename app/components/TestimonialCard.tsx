@@ -1,35 +1,35 @@
 import Image from 'next/image';
 
 interface TestimonialCardProps {
-  name: string;
-  role: string;
-  testimonial: string;
-  image: string;
-  rating: number;
+  nome: string;
+  texto: string;
+  avaliacao: number;
+  data: string;
+  foto: React.ReactNode | null;
   className?: string;
 }
 
-export default function TestimonialCard({ name, role, testimonial, image, rating, className = '' }: TestimonialCardProps) {
+export default function TestimonialCard({ nome, texto, avaliacao, data, foto, className = '' }: TestimonialCardProps) {
   return (
     <div className={`vintage-card ${className}`}>
       <div className="flex items-center mb-6">
         <div className="w-16 h-16 relative rounded-full overflow-hidden border-2 border-yellow-500 mr-4">
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover"
-          />
+          {foto || (
+            <div className="w-full h-full bg-yellow-500/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+          )}
         </div>
         <div>
-          <h3 className="text-lg font-bold text-yellow-500">{name}</h3>
-          <p className="text-light-dark text-sm">{role}</p>
+          <h3 className="text-lg font-bold text-yellow-500">{nome}</h3>
           <div className="flex mt-1">
             {[...Array(5)].map((_, i) => (
               <svg 
                 key={i} 
                 xmlns="http://www.w3.org/2000/svg" 
-                className={`h-4 w-4 ${i < rating ? 'text-yellow-500' : 'text-gray-600'}`} 
+                className={`h-4 w-4 ${i < avaliacao ? 'text-yellow-500' : 'text-gray-600'}`} 
                 viewBox="0 0 20 20" 
                 fill="currentColor"
               >
@@ -39,8 +39,9 @@ export default function TestimonialCard({ name, role, testimonial, image, rating
           </div>
         </div>
       </div>
-      <p className="text-light-dark italic mb-4">"{testimonial}"</p>
-      <div className="flex justify-end">
+      <p className="text-light-dark italic mb-4">"{texto}"</p>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">{data}</span>
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-500 opacity-30" fill="currentColor" viewBox="0 0 24 24">
           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
         </svg>

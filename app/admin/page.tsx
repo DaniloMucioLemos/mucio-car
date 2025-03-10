@@ -144,7 +144,7 @@ export default function AdminPage() {
       
       const updatedAgendamentos = agendamentos.map(a => 
         a.id === selectedAgendamento.id 
-          ? { ...a, status: 'cancelado', observacoes: `${a.observacoes}\nMotivo do cancelamento: ${cancelReason}` }
+          ? { ...a, status: 'cancelado' as const, observacoes: `${a.observacoes}\nMotivo do cancelamento: ${cancelReason}` }
           : a
       );
       setAgendamentos(updatedAgendamentos);
