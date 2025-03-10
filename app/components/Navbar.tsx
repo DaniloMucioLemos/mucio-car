@@ -124,15 +124,26 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div 
-        className={`md:hidden fixed inset-0 bg-dark/95 backdrop-blur-sm transition-all duration-300 ease-in-out z-50 ${
+        className={`md:hidden fixed inset-0 bg-dark/95 backdrop-blur-sm transition-all duration-300 ease-in-out z-[100] ${
           mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
+        {/* Close Button */}
+        <button 
+          className="absolute top-4 right-4 text-white focus:outline-none z-[101]"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        {/* Menu Content */}
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-8">
             <Link 
               href="/" 
-              className={`relative group py-2 text-xl ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-3 text-2xl ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Início</span>
@@ -143,14 +154,14 @@ export default function Navbar() {
                 scrollToSection('services');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-2 text-white text-left text-xl"
+              className="relative group py-3 text-white text-left text-2xl"
             >
               <span>Serviços</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
             <Link 
               href="/galeria" 
-              className={`relative group py-2 text-xl ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-3 text-2xl ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Galeria</span>
@@ -161,14 +172,14 @@ export default function Navbar() {
                 scrollToSection('contact');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-2 text-white text-left text-xl"
+              className="relative group py-3 text-white text-left text-2xl"
             >
               <span>Contato</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
             <Link 
               href="/agendamento" 
-              className={`px-6 py-3 rounded-md border border-yellow-500 transition-all duration-300 text-center text-lg ${
+              className={`px-8 py-4 rounded-md border border-yellow-500 transition-all duration-300 text-center text-xl mt-4 ${
                 pathname === '/agendamento' 
                   ? 'bg-yellow-500 text-dark font-medium' 
                   : 'text-yellow-500 hover:bg-yellow-500 hover:text-dark'
