@@ -10,6 +10,7 @@ import { services } from './data/services';
 import FeedbackButton from './components/FeedbackButton';
 import TestimonialCard from './components/TestimonialCard';
 import { getApprovedTestimonials } from './services/testimonialService';
+import Logo from './components/Logo';
 import { getRecentImages } from './services/galleryService';
 import ContactForm from './components/ContactForm';
 
@@ -109,6 +110,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-dark text-light">
+      <Logo visible={true} size="large" />
       <Navbar />
       
       {/* Hero Section */}

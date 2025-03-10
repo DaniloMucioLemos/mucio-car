@@ -3,12 +3,21 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [logoVisible, setLogoVisible] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isHomePage, setIsHomePage] = useState(true);
   const pathname = usePathname();
+  
+  // Determinar o tamanho da logo com base na página atual
+  const logoSize = pathname === '/agendamento' 
+    ? 'small' 
+    : pathname.startsWith('/admin') 
+      ? 'admin' 
+      : 'large';
 
   useEffect(() => {
     setIsHomePage(pathname === '/');
@@ -22,6 +31,13 @@ export default function Navbar() {
         } else {
           if (scrolled) setScrolled(false);
         }
+        
+        // Controla a visibilidade da logo com base na posição de rolagem
+        if (offset > 400) {
+          if (logoVisible) setLogoVisible(false);
+        } else {
+          if (!logoVisible) setLogoVisible(true);
+        }
       });
     };
 
@@ -29,7 +45,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [pathname, scrolled]);
+  }, [pathname, scrolled, logoVisible]);
 
   const scrollToSection = (sectionId: string) => {
     if (isHomePage) {
