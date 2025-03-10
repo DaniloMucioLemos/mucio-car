@@ -1,56 +1,22 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { getApprovedTestimonials } from '../services/testimonialService'
 import { Testimonial } from '../services/testimonialService'
+import TestimonialCard from './TestimonialCard'
 
 export default function ClientTestimonials() {
-  const [depoimentos, setDepoimentos] = useState<Testimonial[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  
-  // Carregar depoimentos quando o componente é montado
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+
   useEffect(() => {
-    const loadDepoimentos = () => {
-      try {
-        setIsLoading(true);
-        const approvedTestimonials = getApprovedTestimonials();
-        console.log('Todos os depoimentos carregados:', approvedTestimonials);
-        
-        // Ordenar por data (mais recentes primeiro)
-        const sortedTestimonials = [...approvedTestimonials].sort((a, b) => {
-          // Converter datas no formato DD/MM/YYYY para objetos Date
-          const [dayA, monthA, yearA] = a.date.split('/').map(Number);
-          const [dayB, monthB, yearB] = b.date.split('/').map(Number);
-          
-          const dateA = new Date(yearA, monthA - 1, dayA);
-          const dateB = new Date(yearB, monthB - 1, dayB);
-          
-          return dateB.getTime() - dateA.getTime();
-        });
-        
-        // Pegar apenas os 3 mais recentes
-        const latestTestimonials = sortedTestimonials.slice(0, 3);
-        console.log('3 depoimentos mais recentes:', latestTestimonials);
-        
-        setDepoimentos(latestTestimonials);
-      } catch (error) {
-        console.error('Erro ao carregar depoimentos:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    // Carregar os depoimentos inicialmente
-    loadDepoimentos();
-    
-    // Configurar um intervalo para verificar novos depoimentos a cada 5 segundos
-    const intervalId = setInterval(loadDepoimentos, 5000);
-    
-    // Limpar o intervalo quando o componente for desmontado
-    return () => clearInterval(intervalId);
-  }, []);
+    const loadTestimonials = async () => {
+      const data = await getApprovedTestimonials()
+      setTestimonials(data)
+    }
+    loadTestimonials()
+  }, [])
 
   // Renderizar estrelas
   const renderStars = (rating: number) => {
@@ -167,29 +133,24 @@ export default function ClientTestimonials() {
   }
 
   return (
-    <section id="client-testimonials" className="py-20 bg-dark">
-      <div className="container mx-auto px-4 md:px-8">
+    <section id="testimonials" className="py-20 bg-dark">
+      <div className="container mx-auto px-4">
         <h2 className="section-title">O que nossos clientes dizem</h2>
+        <p className="section-subtitle">
+          Depoimentos de clientes satisfeitos com nossos serviços
+        </p>
         
-        <div className="mt-12">
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="inline-block w-8 h-8 border-4 border-yellow-DEFAULT border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-4 text-light-dark">Carregando depoimentos...</p>
-            </div>
-          ) : depoimentos.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-light-dark">Nenhum depoimento disponível no momento.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {depoimentos.map((depoimento) => (
-                <div key={depoimento.id} className="h-full">
-                  {renderDepoimento(depoimento)}
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+          {testimonials.map((testimonial) => (
+            <TestimonialCard
+              key={testimonial.id}
+              nome={testimonial.name}
+              texto={testimonial.comment}
+              avaliacao={testimonial.rating}
+              data={testimonial.date}
+              foto={testimonial.isPositive ? renderAvatar(testimonial.isPositive, testimonial.name) : null}
+            />
+          ))}
         </div>
       </div>
     </section>
