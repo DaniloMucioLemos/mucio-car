@@ -12,7 +12,7 @@ interface Agendamento {
   servico: string;
   data: string;
   horario: string;
-  status: 'pendente' | 'em_andamento' | 'concluido';
+  status: 'pendente' | 'em_andamento' | 'concluido' | 'cancelado';
   fotos?: string[];
   observacoes?: string;
 }
@@ -61,15 +61,15 @@ export default function AdminPage() {
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [fotos, setFotos] = useState<File[]>([]);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
 
   // Simulação de autenticação (substituir por autenticação real)
   useEffect(() => {
-    // Verificar se está autenticado
     const checkAuth = () => {
       const token = localStorage.getItem('admin_token');
       setIsAuthenticated(!!token);
       if (!!token) {
-        // Carregar agendamentos quando autenticado
         setAgendamentos(agendamentosIniciais);
       }
     };
@@ -78,7 +78,6 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implementar login real aqui
     localStorage.setItem('admin_token', 'dummy_token');
     setIsAuthenticated(true);
     setAgendamentos(agendamentosIniciais);
@@ -91,7 +90,6 @@ export default function AdminPage() {
   };
 
   const handleStatusChange = async (agendamento: Agendamento, novoStatus: Agendamento['status']) => {
-    // Implementar atualização de status
     const updatedAgendamentos = agendamentos.map(a => 
       a.id === agendamento.id ? { ...a, status: novoStatus } : a
     );
@@ -106,8 +104,7 @@ export default function AdminPage() {
   };
 
   const handleSubmitFotos = async () => {
-    if (selectedAgendamento) {
-      // Simular upload de fotos
+    if (selectedAgendamento && selectedAgendamento.status === 'concluido') {
       const novasFotos = fotos.map(file => URL.createObjectURL(file));
       const updatedAgendamentos = agendamentos.map(a => 
         a.id === selectedAgendamento.id 
@@ -117,6 +114,29 @@ export default function AdminPage() {
       setAgendamentos(updatedAgendamentos);
       setShowUploadModal(false);
       setFotos([]);
+    }
+  };
+
+  const handleCancelAgendamento = (agendamento: Agendamento) => {
+    setSelectedAgendamento(agendamento);
+    setShowCancelModal(true);
+  };
+
+  const handleSubmitCancel = async () => {
+    if (selectedAgendamento) {
+      // Simular envio de notificações
+      console.log(`Enviando SMS para ${selectedAgendamento.telefone}`);
+      console.log(`Enviando email para ${selectedAgendamento.email}`);
+      
+      const updatedAgendamentos = agendamentos.map(a => 
+        a.id === selectedAgendamento.id 
+          ? { ...a, status: 'cancelado', observacoes: `${a.observacoes}\nMotivo do cancelamento: ${cancelReason}` }
+          : a
+      );
+      setAgendamentos(updatedAgendamentos);
+      setShowCancelModal(false);
+      setCancelReason('');
+      setSelectedAgendamento(null);
     }
   };
 
@@ -180,7 +200,7 @@ export default function AdminPage() {
                   <tr key={agendamento.id} className="border-b border-gray-700">
                     <td className="py-3">{agendamento.cliente}</td>
                     <td className="py-3">{agendamento.servico}</td>
-                    <td className="py-3">{agendamento.data}</td>
+                    <td className="py-3">{agendamento.data} às {agendamento.horario}</td>
                     <td className="py-3">
                       <select
                         value={agendamento.status}
@@ -190,18 +210,29 @@ export default function AdminPage() {
                         <option value="pendente">Pendente</option>
                         <option value="em_andamento">Em Andamento</option>
                         <option value="concluido">Concluído</option>
+                        <option value="cancelado">Cancelado</option>
                       </select>
                     </td>
                     <td className="py-3">
-                      <button
-                        onClick={() => {
-                          setSelectedAgendamento(agendamento);
-                          setShowUploadModal(true);
-                        }}
-                        className="vintage-button-secondary mr-2"
-                      >
-                        Upload Fotos
-                      </button>
+                      {agendamento.status === 'concluido' && (
+                        <button
+                          onClick={() => {
+                            setSelectedAgendamento(agendamento);
+                            setShowUploadModal(true);
+                          }}
+                          className="vintage-button-secondary mr-2"
+                        >
+                          Upload Fotos
+                        </button>
+                      )}
+                      {agendamento.status !== 'cancelado' && agendamento.status !== 'concluido' && (
+                        <button
+                          onClick={() => handleCancelAgendamento(agendamento)}
+                          className="vintage-button-secondary mr-2"
+                        >
+                          Cancelar
+                        </button>
+                      )}
                       <button className="vintage-button">
                         Editar
                       </button>
@@ -215,7 +246,7 @@ export default function AdminPage() {
       </div>
 
       {/* Modal de Upload de Fotos */}
-      {showUploadModal && (
+      {showUploadModal && selectedAgendamento?.status === 'concluido' && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-dark-light p-6 rounded-sm max-w-md w-full">
             <h2 className="text-2xl font-bold mb-4">Upload de Fotos</h2>
@@ -239,6 +270,46 @@ export default function AdminPage() {
                   className="vintage-button"
                 >
                   Enviar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Cancelamento */}
+      {showCancelModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-dark-light p-6 rounded-sm max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4">Cancelar Agendamento</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Motivo do Cancelamento</label>
+                <textarea
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  className="w-full px-4 py-2 bg-dark border border-gray-700 rounded-sm focus:outline-none focus:border-yellow-500"
+                  rows={4}
+                  placeholder="Digite o motivo do cancelamento..."
+                />
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => {
+                    setShowCancelModal(false);
+                    setCancelReason('');
+                    setSelectedAgendamento(null);
+                  }}
+                  className="vintage-button-secondary"
+                >
+                  Voltar
+                </button>
+                <button
+                  onClick={handleSubmitCancel}
+                  className="vintage-button"
+                  disabled={!cancelReason.trim()}
+                >
+                  Confirmar Cancelamento
                 </button>
               </div>
             </div>
