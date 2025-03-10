@@ -123,12 +123,16 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className={`md:hidden bg-dark absolute w-full transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-screen py-4 opacity-100' : 'max-h-0 py-0 opacity-0 overflow-hidden'}`}>
-          <div className="container mx-auto px-4 flex flex-col space-y-4">
+      <div 
+        className={`md:hidden fixed inset-0 bg-dark/95 backdrop-blur-sm transition-all duration-300 ease-in-out z-50 ${
+          mobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+      >
+        <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+          <div className="flex flex-col space-y-6">
             <Link 
               href="/" 
-              className={`relative group py-2 ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-2 text-xl ${pathname === '/' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Início</span>
@@ -136,17 +140,17 @@ export default function Navbar() {
             </Link>
             <button 
               onClick={() => {
-                if (scrollToSection) scrollToSection('services');
+                scrollToSection('services');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-2 text-white text-left"
+              className="relative group py-2 text-white text-left text-xl"
             >
               <span>Serviços</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
             <Link 
               href="/galeria" 
-              className={`relative group py-2 ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
+              className={`relative group py-2 text-xl ${pathname === '/galeria' ? 'text-yellow-500' : 'text-white'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               <span>Galeria</span>
@@ -154,17 +158,17 @@ export default function Navbar() {
             </Link>
             <button 
               onClick={() => {
-                if (scrollToSection) scrollToSection('contact');
+                scrollToSection('contact');
                 setMobileMenuOpen(false);
               }} 
-              className="relative group py-2 text-white text-left"
+              className="relative group py-2 text-white text-left text-xl"
             >
               <span>Contato</span>
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
             <Link 
               href="/agendamento" 
-              className={`px-4 py-2 rounded-md border border-yellow-500 transition-all duration-300 text-center ${
+              className={`px-6 py-3 rounded-md border border-yellow-500 transition-all duration-300 text-center text-lg ${
                 pathname === '/agendamento' 
                   ? 'bg-yellow-500 text-dark font-medium' 
                   : 'text-yellow-500 hover:bg-yellow-500 hover:text-dark'
@@ -175,7 +179,7 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 } 
