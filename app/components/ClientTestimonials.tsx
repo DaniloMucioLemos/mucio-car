@@ -70,67 +70,8 @@ export default function ClientTestimonials() {
     }
   }
 
-  // Renderizar um depoimento
-  const renderDepoimento = (depoimento: Testimonial) => {
-    if (!depoimento) {
-      return (
-        <div className="vintage-card">
-          <p className="text-light-dark">Depoimento não disponível</p>
-        </div>
-      );
-    } else {
-      return (
-        <div className="vintage-card h-full flex flex-col">
-          <div className="flex-grow">
-            <div className="flex items-center mb-4">
-              {renderAvatar(depoimento.isPositive ?? depoimento.rating >= 3, depoimento.name)}
-              <div className="ml-4">
-                <h3 className="font-bold text-lg text-yellow-500">{depoimento.name || 'Cliente'}</h3>
-                <div className="flex">
-                  {renderStars(depoimento.rating)}
-                </div>
-              </div>
-            </div>
-            
-            {(depoimento.vehicleModel || depoimento.service) && (
-              <div className="mb-3 text-sm">
-                {depoimento.vehicleModel && (
-                  <p className="text-yellow-light">
-                    <span className="font-semibold">Veículo:</span> {depoimento.vehicleModel}
-                  </p>
-                )}
-                {depoimento.service && (
-                  <p className="text-yellow-light">
-                    <span className="font-semibold">Serviço:</span> {depoimento.service}
-                  </p>
-                )}
-              </div>
-            )}
-            
-            <p className="text-light mb-4">{depoimento.comment}</p>
-            
-            {depoimento.response && (
-              <div className="mt-4 p-4 bg-yellow-DEFAULT/10 rounded-md border-l-4 border-yellow-DEFAULT">
-                <p className="text-sm font-semibold text-yellow-500 mb-1">Resposta da Mucio Car:</p>
-                <p className="text-light-dark">{depoimento.response}</p>
-                {depoimento.responseDate && (
-                  <p className="text-xs text-light-dark mt-2">
-                    Respondido em {formatDate(depoimento.responseDate)}
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-          
-          <div className="mt-4 pt-4 border-t border-gray-700">
-            <p className="text-xs text-light-dark">
-              {formatDate(depoimento.date)}
-            </p>
-          </div>
-        </div>
-      );
-    }
-  }
+  // Determinar se a avaliação é positiva baseado na nota
+  const isPositiveRating = (rating: number) => rating >= 3;
 
   return (
     <section id="testimonials" className="py-20 bg-dark">
@@ -141,16 +82,19 @@ export default function ClientTestimonials() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard
-              key={testimonial.id}
-              name={testimonial.name}
-              comment={testimonial.comment}
-              rating={testimonial.rating}
-              date={testimonial.date}
-              foto={testimonial.isPositive ?? testimonial.rating >= 3 ? renderAvatar(testimonial.isPositive ?? testimonial.rating >= 3, testimonial.name) : null}
-            />
-          ))}
+          {testimonials.map((testimonial) => {
+            const isPositive = testimonial.isPositive ?? isPositiveRating(testimonial.rating);
+            return (
+              <TestimonialCard
+                key={testimonial.id}
+                name={testimonial.name}
+                comment={testimonial.comment}
+                rating={testimonial.rating}
+                date={testimonial.date}
+                foto={isPositive ? renderAvatar(isPositive, testimonial.name) : null}
+              />
+            );
+          })}
         </div>
       </div>
     </section>
