@@ -38,11 +38,13 @@ export const addTestimonial = async (name: string, rating: number, comment: stri
   return newTestimonial;
 };
 
-export const getPendingTestimonials = async () => {
+// Função para obter depoimentos pendentes
+export const getPendingTestimonials = async (): Promise<Testimonial[]> => {
   return testimonials.filter(t => t.status === 'pendente');
 };
 
-export const updateTestimonialStatus = async (id: string, status: Testimonial['status'], resposta?: string) => {
+// Função para atualizar o status de um depoimento
+export const updateTestimonialStatus = async (id: string, status: Testimonial['status'], resposta?: string): Promise<Testimonial> => {
   const index = testimonials.findIndex(t => t.id === id);
   if (index === -1) throw new Error('Depoimento não encontrado');
   
