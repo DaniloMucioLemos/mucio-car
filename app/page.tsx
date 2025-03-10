@@ -317,15 +317,15 @@ export default function Home() {
       <FeedbackButton />
       
       {/* Link Administrativo */}
-      <div className="fixed bottom-4 right-4">
+      <footer className="py-4 bg-dark-light text-center">
         <a 
           href="/admin" 
           className="text-xs text-gray-500 hover:text-yellow-500 transition-colors"
           title="Acesso Administrativo"
         >
-          Admin
+          Área Administrativa
         </a>
-      </div>
+      </footer>
       
     </div>
   );

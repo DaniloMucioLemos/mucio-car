@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
-import Logo from '../components/Logo';
 
 interface Agendamento {
   id: string;
@@ -18,6 +17,44 @@ interface Agendamento {
   observacoes?: string;
 }
 
+// Dados iniciais de exemplo
+const agendamentosIniciais: Agendamento[] = [
+  {
+    id: '1',
+    cliente: 'João Silva',
+    telefone: '(16) 99999-9999',
+    email: 'joao@email.com',
+    servico: 'Polimento',
+    data: '2024-03-20',
+    horario: '09:00',
+    status: 'pendente',
+    observacoes: 'Carro preto, modelo 2020'
+  },
+  {
+    id: '2',
+    cliente: 'Maria Santos',
+    telefone: '(16) 98888-8888',
+    email: 'maria@email.com',
+    servico: 'Lavagem Premium',
+    data: '2024-03-21',
+    horario: '14:00',
+    status: 'em_andamento',
+    observacoes: 'SUV branca, modelo 2022'
+  },
+  {
+    id: '3',
+    cliente: 'Pedro Oliveira',
+    telefone: '(16) 97777-7777',
+    email: 'pedro@email.com',
+    servico: 'Higienização Interna',
+    data: '2024-03-22',
+    horario: '10:00',
+    status: 'concluido',
+    fotos: ['/images/cars/classic-car-1.jpg'],
+    observacoes: 'Carro vermelho, modelo 2019'
+  }
+];
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
@@ -31,6 +68,10 @@ export default function AdminPage() {
     const checkAuth = () => {
       const token = localStorage.getItem('admin_token');
       setIsAuthenticated(!!token);
+      if (!!token) {
+        // Carregar agendamentos quando autenticado
+        setAgendamentos(agendamentosIniciais);
+      }
     };
     checkAuth();
   }, []);
@@ -40,11 +81,13 @@ export default function AdminPage() {
     // Implementar login real aqui
     localStorage.setItem('admin_token', 'dummy_token');
     setIsAuthenticated(true);
+    setAgendamentos(agendamentosIniciais);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
     setIsAuthenticated(false);
+    setAgendamentos([]);
   };
 
   const handleStatusChange = async (agendamento: Agendamento, novoStatus: Agendamento['status']) => {
@@ -63,9 +106,18 @@ export default function AdminPage() {
   };
 
   const handleSubmitFotos = async () => {
-    // Implementar upload de fotos
-    setShowUploadModal(false);
-    setFotos([]);
+    if (selectedAgendamento) {
+      // Simular upload de fotos
+      const novasFotos = fotos.map(file => URL.createObjectURL(file));
+      const updatedAgendamentos = agendamentos.map(a => 
+        a.id === selectedAgendamento.id 
+          ? { ...a, fotos: [...(a.fotos || []), ...novasFotos] }
+          : a
+      );
+      setAgendamentos(updatedAgendamentos);
+      setShowUploadModal(false);
+      setFotos([]);
+    }
   };
 
   if (!isAuthenticated) {
@@ -99,7 +151,6 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-dark text-light">
-      <Logo visible={true} size="large" />
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
