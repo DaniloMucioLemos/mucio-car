@@ -4,58 +4,11 @@ import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Link from 'next/link'
-import { getTestimonials } from '../services/testimonialService'
-import { Testimonial } from '../models/Testimonial'
+import { useTestimonials } from '../contexts/TestimonialContext'
 
 export default function Testimonials() {
-  const [depoimentos, setDepoimentos] = useState<Testimonial[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { testimonials: depoimentos, loading: isLoading } = useTestimonials();
   
-  // Carregar depoimentos quando o componente é montado
-  useEffect(() => {
-    const loadTestimonials = async () => {
-      try {
-        setIsLoading(true);
-        const allTestimonials = await getTestimonials();
-        console.log('Todos os depoimentos carregados:', allTestimonials);
-        
-        // Filtrar apenas depoimentos aprovados
-        const approvedTestimonials = allTestimonials.filter(t => t.status === 'aprovado');
-        
-        // Ordenar por data (mais recentes primeiro)
-        const sortedTestimonials = [...approvedTestimonials].sort((a, b) => {
-          // Converter datas no formato DD/MM/YYYY para objetos Date
-          const [dayA, monthA, yearA] = a.date.split('/').map(Number);
-          const [dayB, monthB, yearB] = b.date.split('/').map(Number);
-          
-          const dateA = new Date(yearA, monthA - 1, dayA);
-          const dateB = new Date(yearB, monthB - 1, dayB);
-          
-          return dateB.getTime() - dateA.getTime();
-        });
-        
-        // Pegar apenas os 3 mais recentes
-        const latestTestimonials = sortedTestimonials.slice(0, 3);
-        console.log('3 depoimentos mais recentes:', latestTestimonials);
-        
-        setDepoimentos(latestTestimonials);
-      } catch (error) {
-        console.error('Erro ao carregar depoimentos:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    // Carregar os depoimentos inicialmente
-    loadTestimonials();
-    
-    // Configurar um intervalo para verificar novos depoimentos a cada 5 segundos
-    const intervalId = setInterval(loadTestimonials, 5000);
-    
-    // Limpar o intervalo quando o componente for desmontado
-    return () => clearInterval(intervalId);
-  }, []);
-
   // Renderizar estrelas
   const renderStars = (rating: number) => {
     const stars = []

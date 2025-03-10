@@ -30,7 +30,18 @@ export function TestimonialProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    loadTestimonials();
+    // Função auto-executável para usar async/await
+    (async () => {
+      await loadTestimonials();
+    })();
+
+    // Configurar um intervalo para verificar novos depoimentos a cada 5 segundos
+    const intervalId = setInterval(async () => {
+      await loadTestimonials();
+    }, 5000);
+
+    // Limpar o intervalo quando o componente for desmontado
+    return () => clearInterval(intervalId);
   }, []);
 
   const addTestimonial = async (name: string, rating: number, comment: string, vehicleModel?: string, service?: string) => {
