@@ -15,10 +15,10 @@ export default function DepoimentosPage() {
   
   // Carregar depoimentos quando o componente é montado
   useEffect(() => {
-    const loadTestimonials = () => {
+    const loadTestimonials = async () => {
       try {
         setIsLoading(true);
-        const testimonials = getTestimonials();
+        const testimonials = await getTestimonials();
         console.log('Depoimentos carregados:', testimonials);
         setDepoimentos(testimonials);
       } catch (error) {
