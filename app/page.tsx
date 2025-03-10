@@ -13,6 +13,7 @@ import { getApprovedTestimonials } from './services/testimonialService';
 import Logo from './components/Logo';
 import { getRecentImages } from './services/galleryService';
 import ContactForm from './components/ContactForm';
+import ImageCarousel from './components/ImageCarousel';
 
 // Lazy load componentes pesados
 const ClientTestimonials = lazy(() => import('./components/ClientTestimonials'));
@@ -114,7 +115,7 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/cars/classic-car-1.jpg" 
@@ -125,8 +126,42 @@ export default function Home() {
             className="w-full h-full object-cover brightness-[0.3]"
           />
         </div>
+
+        {/* Carrossel de Imagens */}
+        <div className="absolute top-1/4 left-0 right-0 z-10">
+          <div className="container mx-auto px-4">
+            <ImageCarousel 
+              images={[
+                {
+                  src: "/images/cars/classic-car-1.jpg",
+                  alt: "Carro clássico restaurado"
+                },
+                {
+                  src: "/images/cars/classic-car-2.jpg",
+                  alt: "Detalhes da restauração"
+                },
+                {
+                  src: "/images/cars/classic-car-3.jpg",
+                  alt: "Interior restaurado"
+                },
+                {
+                  src: "/images/cars/classic-car-4.jpg",
+                  alt: "Pintura restaurada"
+                },
+                {
+                  src: "/images/cars/classic-car-5.jpg",
+                  alt: "Detalhes do motor"
+                },
+                {
+                  src: "/images/cars/classic-car-6.jpg",
+                  alt: "Acabamento interno"
+                }
+              ]} 
+            />
+          </div>
+        </div>
         
-        <div className="container mx-auto px-4 relative z-10 text-center">
+        <div className="container mx-auto px-4 relative z-10 text-center mt-[400px]">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 font-serif">
             Estética Automotiva <span className="text-yellow-500">Premium</span>
           </h1>

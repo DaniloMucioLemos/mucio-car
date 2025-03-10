@@ -463,4 +463,53 @@ body {
       opacity: 1;
     }
   }
+}
+
+/* Estilos do Swiper */
+.swiper {
+  width: 100%;
+  padding: 0 40px;
+}
+
+.swiper-slide {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #EAB308 !important;
+  background: rgba(0, 0, 0, 0.5);
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50%;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 16px !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.swiper-slide-thumb-active {
+  opacity: 1;
+  border: 2px solid #EAB308;
+}
+
+/* Estilos do Modal */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
 } 
