@@ -51,12 +51,21 @@ export default function Navbar() {
       aria-label="Menu principal"
     >
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16 md:h-20">
           <Link href="/" className="flex items-center">
             <div className="flex items-center">
               {/* Silhueta do carro */}
               <div className="relative">
-                <svg width="50" height="30" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo Mucio Car">
+                <svg 
+                  width="40" 
+                  height="24" 
+                  viewBox="0 0 100 60" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  role="img" 
+                  aria-label="Logo Mucio Car"
+                  className="md:w-[50px] md:h-[30px]"
+                >
                   <path 
                     d="M5,40 C15,20 30,15 40,15 C60,15 70,25 85,25 C95,25 95,35 95,40 C95,45 90,45 85,45 C75,45 65,35 40,35 C25,35 15,45 10,45 C5,45 0,45 5,40 Z" 
                     fill="#FFD700" 
