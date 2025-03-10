@@ -144,10 +144,10 @@ export default function ClientTestimonials() {
           {testimonials.map((testimonial) => (
             <TestimonialCard
               key={testimonial.id}
-              nome={testimonial.name}
-              texto={testimonial.comment}
-              avaliacao={testimonial.rating}
-              data={testimonial.date}
+              name={testimonial.name}
+              comment={testimonial.comment}
+              rating={testimonial.rating}
+              date={testimonial.date}
               foto={testimonial.isPositive ? renderAvatar(testimonial.isPositive, testimonial.name) : null}
             />
           ))}
