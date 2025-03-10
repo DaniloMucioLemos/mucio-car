@@ -12,20 +12,8 @@ interface LogoProps {
 
 export default function Logo({ className = '', visible = true, size = 'large' }: LogoProps) {
   const [opacity, setOpacity] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Verificar se é dispositivo móvel
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Verificar inicialmente
-    checkMobile();
-    
-    // Verificar quando a janela for redimensionada
-    window.addEventListener('resize', checkMobile);
-
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       if (scrollPosition > 50) {
@@ -39,7 +27,6 @@ export default function Logo({ className = '', visible = true, size = 'large' }:
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', checkMobile);
     };
   }, []);
 
@@ -53,14 +40,9 @@ export default function Logo({ className = '', visible = true, size = 'large' }:
 
   const { width, height } = dimensions[size];
 
-  // Se for mobile, não renderiza nada
-  if (isMobile) {
-    return null;
-  }
-
   return (
     <div 
-      className={`${className} fixed z-50 transition-all duration-500 ${
+      className={`${className} fixed z-50 transition-all duration-500 hidden md:block ${
         visible ? 'opacity-100 transform translate-y-0' : 'opacity-0 pointer-events-none transform -translate-y-full'
       }`}
       style={{ marginLeft: '120px', marginTop: '40px', opacity: opacity }}
