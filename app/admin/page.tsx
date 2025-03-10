@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from '../components/Navbar';
+import TestimonialCard from '../components/TestimonialCard';
+import { testimonialService, Testimonial } from '../services/testimonialService';
 
 interface Agendamento {
   id: string;
@@ -63,6 +65,10 @@ export default function AdminPage() {
   const [fotos, setFotos] = useState<File[]>([]);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
+  const [showResponseModal, setShowResponseModal] = useState(false);
+  const [responseText, setResponseText] = useState('');
 
   // Simulação de autenticação (substituir por autenticação real)
   useEffect(() => {
@@ -71,22 +77,30 @@ export default function AdminPage() {
       setIsAuthenticated(!!token);
       if (!!token) {
         setAgendamentos(agendamentosIniciais);
+        loadTestimonials();
       }
     };
     checkAuth();
   }, []);
+
+  const loadTestimonials = async () => {
+    const data = await testimonialService.getAllTestimonials();
+    setTestimonials(data);
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem('admin_token', 'dummy_token');
     setIsAuthenticated(true);
     setAgendamentos(agendamentosIniciais);
+    loadTestimonials();
   };
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
     setIsAuthenticated(false);
     setAgendamentos([]);
+    setTestimonials([]);
   };
 
   const handleStatusChange = async (agendamento: Agendamento, novoStatus: Agendamento['status']) => {
@@ -140,6 +154,31 @@ export default function AdminPage() {
     }
   };
 
+  const handleApproveTestimonial = async (testimonial: Testimonial) => {
+    await testimonialService.updateTestimonialStatus(testimonial.id, 'aprovado');
+    loadTestimonials();
+  };
+
+  const handleRejectTestimonial = async (testimonial: Testimonial) => {
+    await testimonialService.updateTestimonialStatus(testimonial.id, 'rejeitado');
+    loadTestimonials();
+  };
+
+  const handleRespondTestimonial = (testimonial: Testimonial) => {
+    setSelectedTestimonial(testimonial);
+    setShowResponseModal(true);
+  };
+
+  const handleSubmitResponse = async () => {
+    if (selectedTestimonial) {
+      await testimonialService.updateTestimonialStatus(selectedTestimonial.id, 'aprovado', responseText);
+      setShowResponseModal(false);
+      setResponseText('');
+      setSelectedTestimonial(null);
+      loadTestimonials();
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-dark text-light flex items-center justify-center">
@@ -182,7 +221,7 @@ export default function AdminPage() {
         </div>
 
         {/* Lista de Agendamentos */}
-        <div className="bg-dark-light rounded-sm p-6">
+        <div className="bg-dark-light rounded-sm p-6 mb-8">
           <h2 className="text-2xl font-bold mb-6">Agendamentos</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -241,6 +280,46 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* Seção de Depoimentos */}
+        <div className="bg-dark-light rounded-sm p-6">
+          <h2 className="text-2xl font-bold mb-6">Depoimentos Pendentes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {testimonials
+              .filter(t => t.status === 'pendente')
+              .map((testimonial) => (
+                <div key={testimonial.id} className="relative">
+                  <TestimonialCard
+                    nome={testimonial.nome}
+                    texto={testimonial.texto}
+                    avaliacao={testimonial.avaliacao}
+                    data={testimonial.data}
+                    foto={testimonial.foto}
+                  />
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <button
+                      onClick={() => handleApproveTestimonial(testimonial)}
+                      className="vintage-button-secondary text-sm"
+                    >
+                      Aprovar
+                    </button>
+                    <button
+                      onClick={() => handleRejectTestimonial(testimonial)}
+                      className="vintage-button-secondary text-sm"
+                    >
+                      Rejeitar
+                    </button>
+                    <button
+                      onClick={() => handleRespondTestimonial(testimonial)}
+                      className="vintage-button text-sm"
+                    >
+                      Responder
+                    </button>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -310,6 +389,46 @@ export default function AdminPage() {
                   disabled={!cancelReason.trim()}
                 >
                   Confirmar Cancelamento
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Resposta ao Depoimento */}
+      {showResponseModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-dark-light p-6 rounded-sm max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4">Responder Depoimento</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Sua Resposta</label>
+                <textarea
+                  value={responseText}
+                  onChange={(e) => setResponseText(e.target.value)}
+                  className="w-full px-4 py-2 bg-dark border border-gray-700 rounded-sm focus:outline-none focus:border-yellow-500"
+                  rows={4}
+                  placeholder="Digite sua resposta ao depoimento..."
+                />
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => {
+                    setShowResponseModal(false);
+                    setResponseText('');
+                    setSelectedTestimonial(null);
+                  }}
+                  className="vintage-button-secondary"
+                >
+                  Voltar
+                </button>
+                <button
+                  onClick={handleSubmitResponse}
+                  className="vintage-button"
+                  disabled={!responseText.trim()}
+                >
+                  Enviar Resposta
                 </button>
               </div>
             </div>

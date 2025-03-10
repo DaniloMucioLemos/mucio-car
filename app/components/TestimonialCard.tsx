@@ -13,7 +13,7 @@ export default function TestimonialCard({ name, role, testimonial, image, rating
   return (
     <div className={`vintage-card ${className}`}>
       <div className="flex items-center mb-6">
-        <div className="w-16 h-16 relative rounded-full overflow-hidden border-2 border-gold-DEFAULT mr-4">
+        <div className="w-16 h-16 relative rounded-full overflow-hidden border-2 border-yellow-500 mr-4">
           <Image
             src={image}
             alt={name}
