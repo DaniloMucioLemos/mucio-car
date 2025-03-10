@@ -26,7 +26,13 @@ export default function FeedbackButton() {
     
     try {
       // Adicionar o depoimento diretamente usando o serviço
-      const newTestimonial = addTestimonialService(name, rating, feedback, vehicleModel, service);
+      const newTestimonial = await addTestimonialService({
+        name,
+        rating,
+        comment: feedback,
+        vehicleModel,
+        service
+      });
       console.log('Novo depoimento adicionado:', newTestimonial);
       
       // Após o envio bem-sucedido
