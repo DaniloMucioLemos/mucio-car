@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import Footer from '../components/Footer';
 import { getTestimonials } from '../services/testimonialService';
 import { Testimonial } from '../models/Testimonial';
 import FeedbackButton from '../components/FeedbackButton';
@@ -230,8 +229,6 @@ export default function DepoimentosPage() {
       </section>
       
       <FeedbackButton />
-      
-      <Footer />
     </main>
   );
 } 

@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { AppointmentProvider } from './context/AppointmentContext'
 import { Inter } from 'next/font/google'
-import Footer from './components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -79,7 +78,6 @@ export default function RootLayout({
         <AppointmentProvider>
           {children}
         </AppointmentProvider>
-        <Footer />
       </body>
     </html>
   )
