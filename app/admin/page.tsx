@@ -292,11 +292,11 @@ export default function AdminPage() {
               .map((testimonial) => (
                 <div key={testimonial.id} className="relative">
                   <TestimonialCard
-                    nome={testimonial.nome}
-                    texto={testimonial.texto}
-                    avaliacao={testimonial.avaliacao}
-                    data={testimonial.data}
-                    foto={testimonial.foto}
+                    name={testimonial.name}
+                    comment={testimonial.comment}
+                    rating={testimonial.rating}
+                    date={testimonial.date}
+                    foto={testimonial.isPositive ? renderAvatar(testimonial.isPositive, testimonial.name) : null}
                   />
                   <div className="absolute top-4 right-4 flex gap-2">
                     <button
