@@ -51,14 +51,14 @@ export default function Navbar() {
       aria-label="Menu principal"
     >
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16 md:h-20">
-          <Link href="/" className="flex items-center">
+        <div className="flex justify-between items-center h-14 md:h-20">
+          <Link href="/" className="flex items-center -ml-2 md:ml-0">
             <div className="flex items-center">
               {/* Silhueta do carro */}
               <div className="relative">
                 <svg 
-                  width="40" 
-                  height="24" 
+                  width="28" 
+                  height="16" 
                   viewBox="0 0 100 60" 
                   fill="none" 
                   xmlns="http://www.w3.org/2000/svg" 
