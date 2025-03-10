@@ -8,22 +8,10 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isHomePage, setIsHomePage] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     // Verificar se estamos na página inicial
     setIsHomePage(window.location.pathname === '/')
-
-    // Verificar se é mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    // Verificar inicialmente
-    checkMobile()
-    
-    // Verificar quando a janela for redimensionada
-    window.addEventListener('resize', checkMobile)
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
@@ -32,7 +20,6 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', checkMobile)
     }
   }, [])
 
@@ -67,7 +54,8 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-14 md:h-20">
-          {!isMobile && (
+          {/* Logo apenas para desktop */}
+          <div className="w-0 md:w-auto overflow-hidden md:overflow-visible">
             <Link href="/" className="flex items-center">
               <div className="flex items-center">
                 {/* Silhueta do carro */}
@@ -102,10 +90,10 @@ export default function Navbar() {
                 </div>
               </div>
             </Link>
-          )}
+          </div>
           
           {/* Espaço vazio para manter o layout na versão mobile */}
-          {isMobile && <div className="flex-1"></div>}
+          <div className="flex-1 md:hidden"></div>
 
           {/* Botão do menu mobile */}
           <button
