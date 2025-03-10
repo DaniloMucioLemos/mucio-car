@@ -13,10 +13,10 @@ export default function Testimonials() {
   
   // Carregar depoimentos quando o componente é montado
   useEffect(() => {
-    const loadTestimonials = () => {
+    const loadTestimonials = async () => {
       try {
         setIsLoading(true);
-        const allTestimonials = getTestimonials();
+        const allTestimonials = await getTestimonials();
         console.log('Todos os depoimentos carregados:', allTestimonials);
         
         // Ordenar por data (mais recentes primeiro)
