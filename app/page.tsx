@@ -7,17 +7,14 @@ import Navbar from './components/Navbar';
 import ServiceCard from './components/ServiceCard';
 import { useRouter } from 'next/navigation';
 import { services } from './data/services';
-import FeedbackButton from './components/FeedbackButton';
-import TestimonialCard from './components/TestimonialCard';
-import { getApprovedTestimonials } from './services/testimonialService';
 import Logo from './components/Logo';
-import ContactForm from './components/ContactForm';
 import ImageCarousel from './components/ImageCarousel';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
 
 // Lazy load componentes pesados
-const ClientTestimonials = lazy(() => import('./components/ClientTestimonials'));
+const ContactForm = lazy(() => import('./components/ContactForm'));
+const Footer = lazy(() => import('./components/Footer'));
+const WhatsAppButton = lazy(() => import('./components/WhatsAppButton'));
+const FeedbackButton = lazy(() => import('./components/FeedbackButton'));
 
 // Componente de fallback para lazy loading
 const LoadingFallback = () => (
@@ -29,7 +26,6 @@ const LoadingFallback = () => (
 
 export default function Home() {
   const router = useRouter();
-  const [isLoaded, setIsLoaded] = useState(false);
   const [visibleSections, setVisibleSections] = useState<string[]>([]);
 
   const scrollToSection = (sectionId: string) => {
@@ -46,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     // Marcar como carregado após a montagem do componente
-    setIsLoaded(true);
+    // setIsLoaded(true);
 
     // Implementar Intersection Observer para carregar seções apenas quando visíveis
     const observerOptions = {
@@ -223,13 +219,6 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Client Testimonials Section */}
-      {isLoaded && (
-        <Suspense fallback={<LoadingFallback />}>
-          <ClientTestimonials />
-        </Suspense>
-      )}
-      
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-dark-light">
         <div className="container mx-auto px-4 md:px-8">
@@ -310,15 +299,25 @@ export default function Home() {
             </div>
             
             <div className="animate-on-scroll">
-              <ContactForm />
+              <Suspense fallback={<LoadingFallback />}>
+                <ContactForm />
+              </Suspense>
             </div>
           </div>
         </div>
       </section>
       
-      <Footer />
-      <WhatsAppButton />
-      <FeedbackButton />
+      <Suspense fallback={<LoadingFallback />}>
+        <Footer />
+      </Suspense>
+      
+      <Suspense fallback={null}>
+        <WhatsAppButton />
+      </Suspense>
+      
+      <Suspense fallback={null}>
+        <FeedbackButton />
+      </Suspense>
       
     </div>
   );
