@@ -78,3 +78,5 @@ A Mucio Car é uma estética automotiva fundada em 2016 por Bruno Mucio na cidad
 Desenvolvido com ❤️ para a Mucio Car 
 
 Desenvolvido por [Danilo Mucio](https://wa.me/5516997452118) - Webdesigner e Programador Web
+
+const isPositiveRating = (rating: number) => rating >= 3;

@@ -13,6 +13,8 @@ import { getApprovedTestimonials } from './services/testimonialService';
 import Logo from './components/Logo';
 import ContactForm from './components/ContactForm';
 import ImageCarousel from './components/ImageCarousel';
+import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Lazy load componentes pesados
 const ClientTestimonials = lazy(() => import('./components/ClientTestimonials'));
@@ -314,18 +316,9 @@ export default function Home() {
         </div>
       </section>
       
+      <Footer />
+      <WhatsAppButton />
       <FeedbackButton />
-      
-      {/* Link Administrativo */}
-      <footer className="py-4 bg-dark-light text-center">
-        <a 
-          href="/admin" 
-          className="text-xs text-gray-500 hover:text-yellow-500 transition-colors"
-          title="Acesso Administrativo"
-        >
-          Área Administrativa
-        </a>
-      </footer>
       
     </div>
   );
