@@ -83,7 +83,7 @@ export default function ClientTestimonials() {
         <div className="vintage-card h-full flex flex-col">
           <div className="flex-grow">
             <div className="flex items-center mb-4">
-              {renderAvatar(depoimento.isPositive, depoimento.name)}
+              {renderAvatar(depoimento.isPositive ?? depoimento.rating >= 3, depoimento.name)}
               <div className="ml-4">
                 <h3 className="font-bold text-lg text-yellow-500">{depoimento.name || 'Cliente'}</h3>
                 <div className="flex">
@@ -148,7 +148,7 @@ export default function ClientTestimonials() {
               comment={testimonial.comment}
               rating={testimonial.rating}
               date={testimonial.date}
-              foto={testimonial.isPositive ? renderAvatar(testimonial.isPositive, testimonial.name) : null}
+              foto={testimonial.isPositive ?? testimonial.rating >= 3 ? renderAvatar(testimonial.isPositive ?? testimonial.rating >= 3, testimonial.name) : null}
             />
           ))}
         </div>
