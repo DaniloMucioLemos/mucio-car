@@ -1,37 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLogin() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    console.log('Login - Status:', status);
-    console.log('Login - Session:', session);
-
-    // Se ainda está carregando, não faz nada
-    if (status === 'loading') {
-      console.log('Status ainda carregando, aguardando...');
-      return;
-    }
-
-    const handleRedirect = async () => {
-      if (status === 'authenticated' && session?.user?.role === 'admin') {
-        console.log('Usuário admin já autenticado, redirecionando para dashboard');
-        await router.push('/admin/dashboard');
-      }
-    };
-
-    // Adiciona um pequeno delay para garantir que a sessão esteja atualizada
-    const timeoutId = setTimeout(handleRedirect, 100);
-    return () => clearTimeout(timeoutId);
-  }, [status, session, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,7 +38,7 @@ export default function AdminLogin() {
         }
       } else if (result?.ok) {
         console.log('Login bem-sucedido, aguardando sessão...');
-        // O redirecionamento será feito pelo useEffect quando a sessão for atualizada
+        // O redirecionamento será feito pelo layout quando a sessão for atualizada
       } else {
         console.error('Erro desconhecido no login');
         setError('Ocorreu um erro ao fazer login');
@@ -80,15 +56,6 @@ export default function AdminLogin() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl">Carregando...</div>
-      </div>
-    );
-  }
-
-  // Se já estiver autenticado como admin, não mostra o formulário
-  if (status === 'authenticated' && session?.user?.role === 'admin') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-xl">Redirecionando...</div>
       </div>
     );
   }

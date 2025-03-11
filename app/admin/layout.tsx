@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -12,54 +12,61 @@ export default function AdminLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     console.log('AdminLayout - Status:', status);
     console.log('AdminLayout - Session:', session);
     console.log('AdminLayout - Pathname:', pathname);
 
-    // Se ainda está carregando, não faz nada
-    if (status === 'loading') {
-      console.log('Status ainda carregando, aguardando...');
+    // Se ainda está carregando ou já está redirecionando, não faz nada
+    if (status === 'loading' || isRedirecting) {
+      console.log('Status carregando ou já redirecionando, aguardando...');
       return;
     }
 
     const handleRedirect = async () => {
-      // Se estiver na página de login
-      if (pathname === '/admin/login') {
-        if (status === 'authenticated' && session?.user?.role === 'admin') {
-          console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
-          await router.push('/admin/dashboard');
-        }
-        return;
-      }
+      setIsRedirecting(true);
 
-      // Se não estiver na página de login
-      if (status === 'unauthenticated') {
-        console.log('Usuário não autenticado, redirecionando para login');
-        await router.push('/admin/login');
-        return;
-      }
-
-      if (status === 'authenticated') {
-        if (!session?.user?.role || session.user.role !== 'admin') {
-          console.log('Usuário autenticado mas não é admin');
-          await router.push('/admin/login');
+      try {
+        // Se estiver na página de login
+        if (pathname === '/admin/login') {
+          if (status === 'authenticated' && session?.user?.role === 'admin') {
+            console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
+            await router.replace('/admin/dashboard');
+          }
           return;
         }
+
+        // Se não estiver na página de login
+        if (status === 'unauthenticated') {
+          console.log('Usuário não autenticado, redirecionando para login');
+          await router.replace('/admin/login');
+          return;
+        }
+
+        if (status === 'authenticated') {
+          if (!session?.user?.role || session.user.role !== 'admin') {
+            console.log('Usuário autenticado mas não é admin');
+            await router.replace('/admin/login');
+            return;
+          }
+        }
+      } finally {
+        setIsRedirecting(false);
       }
     };
 
-    // Adiciona um pequeno delay para garantir que a sessão esteja atualizada
-    const timeoutId = setTimeout(handleRedirect, 100);
-    return () => clearTimeout(timeoutId);
-  }, [status, session, router, pathname]);
+    handleRedirect();
+  }, [status, session, router, pathname, isRedirecting]);
 
-  // Mostra loading apenas se estiver carregando
-  if (status === 'loading') {
+  // Mostra loading durante carregamento ou redirecionamento
+  if (status === 'loading' || isRedirecting) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Carregando...</div>
+        <div className="text-xl">
+          {isRedirecting ? 'Redirecionando...' : 'Carregando...'}
+        </div>
       </div>
     );
   }
