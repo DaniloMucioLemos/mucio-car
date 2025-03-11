@@ -4,12 +4,6 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Login Administrativo - Múcio Car Estética",
-  description: "Área de login administrativa do Múcio Car Estética",
-};
 
 export default function AdminLogin() {
   const router = useRouter();
