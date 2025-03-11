@@ -1,18 +1,97 @@
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
-model Service {
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+  role           String    @default("user")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Agendamento {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String
+  telefone  String
+  data      DateTime
+  servico   String
+  mensagem  String?
+  status    String   @default("pendente")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Depoimento {
+  id        String   @id @default(cuid())
+  nome      String
+  cargo     String?
+  texto     String
+  imagem    String?
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Servico {
   id          String   @id @default(cuid())
-  title       String
-  description String
-  icon        String
-  price       String
+  titulo      String
+  descricao   String
+  preco       Float?
+  imagem      String?
+  destaque    Boolean  @default(false)
+  ativo       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Galeria {
+  id          String   @id @default(cuid())
+  titulo      String
+  descricao   String?
+  imagem      String
+  categoria   String?
+  destaque    Boolean  @default(false)
+  ativo       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model service {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  duration    Int
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  appointments appointment[]
+}
+
+model appointment {
+  id          String   @id @default(cuid())
+  date        DateTime
+  clientName  String
+  clientEmail String
+  clientPhone String
+  status      String   @default("pending")
+  notes       String?
+  serviceId   String
+  service     service  @relation(fields: [serviceId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 } 

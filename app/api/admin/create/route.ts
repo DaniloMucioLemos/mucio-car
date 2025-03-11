@@ -1,9 +1,10 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-async function main() {
+export async function POST() {
   const email = "admin@muciocar.com";
   const password = "admin123"; // Você deve alterar esta senha após o primeiro login
 
@@ -13,8 +14,10 @@ async function main() {
     });
 
     if (existingUser) {
-      console.log("Usuário administrador já existe!");
-      return;
+      return NextResponse.json(
+        { message: "Usuário administrador já existe!" },
+        { status: 400 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,15 +31,19 @@ async function main() {
       },
     });
 
-    console.log("Usuário administrador criado com sucesso!");
-    console.log("Email:", email);
-    console.log("Senha:", password);
-    console.log("Por favor, altere a senha após o primeiro login.");
+    return NextResponse.json(
+      {
+        message: "Usuário administrador criado com sucesso!",
+        email,
+        password,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Erro ao criar usuário administrador:", error);
-  } finally {
-    await prisma.$disconnect();
+    return NextResponse.json(
+      { message: "Erro ao criar usuário administrador" },
+      { status: 500 }
+    );
   }
-}
-
-main(); 
+} 

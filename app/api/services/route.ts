@@ -1,11 +1,24 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/auth';
 
 const prisma = new PrismaClient();
 
+// GET /api/services - Lista todos os serviços
 export async function GET() {
   try {
-    const services = await prisma.service.findMany();
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
+    const services = await prisma.service.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
     return NextResponse.json(services);
   } catch (error) {
     console.error('Erro ao buscar serviços:', error);
@@ -16,18 +29,26 @@ export async function GET() {
   }
 }
 
+// POST /api/services - Cria um novo serviço
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    }
+
     const data = await request.json();
     const service = await prisma.service.create({
       data: {
-        title: data.title,
+        name: data.name,
         description: data.description,
-        icon: data.icon,
-        price: data.price
-      }
+        price: data.price,
+        duration: data.duration,
+        active: data.active,
+      },
     });
-    return NextResponse.json(service);
+
+    return NextResponse.json(service, { status: 201 });
   } catch (error) {
     console.error('Erro ao criar serviço:', error);
     return NextResponse.json(

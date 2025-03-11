@@ -15,64 +15,62 @@ export const isSameDay = (date1: Date, date2: Date) => {
   )
 }
 
-// Tipo para os agendamentos
-export type Appointment = {
-  id: number
-  date: Date
-  time: string
-  service: string
-  professional: string
-  client: string
-  phone: string
-  email: string
-  vehicle: string
+interface Service {
+  id: string;
+  name: string;
+  duration: number;
+  price: number;
 }
 
-// Array vazio para iniciar sem agendamentos
-const initialAppointments: Appointment[] = []
-
-interface AppointmentData {
-  name: string;
-  email: string;
-  phone: string;
-  vehicle: string;
-  service: string;
+interface Appointment {
+  id: string;
   date: string;
-  time: string;
-  message: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  status: string;
+  notes?: string;
+  service: Service;
 }
 
 interface AppointmentContextType {
-  appointmentData: AppointmentData | null;
-  setAppointmentData: (data: AppointmentData) => void;
-  clearAppointmentData: () => void;
+  selectedDate: Date | null;
+  setSelectedDate: (date: Date | null) => void;
+  selectedService: Service | null;
+  setSelectedService: (service: Service | null) => void;
+  appointments: Appointment[];
+  setAppointments: (appointments: Appointment[]) => void;
 }
 
-const defaultAppointmentData: AppointmentData = {
-  name: '',
-  email: '',
-  phone: '',
-  vehicle: '',
-  service: '',
-  date: '',
-  time: '',
-  message: '',
-};
+const AppointmentContext = createContext<AppointmentContextType | undefined>(undefined);
 
-// Criando o contexto
-const AppointmentContext = createContext<AppointmentContextType>({
-  appointmentData: null,
-  setAppointmentData: () => {},
-  clearAppointmentData: () => {},
-});
+export function AppointmentProvider({ children }: { children: ReactNode }) {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
-// Hook personalizado para usar o contexto
+  return (
+    <AppointmentContext.Provider
+      value={{
+        selectedDate,
+        setSelectedDate,
+        selectedService,
+        setSelectedService,
+        appointments,
+        setAppointments,
+      }}
+    >
+      {children}
+    </AppointmentContext.Provider>
+  );
+}
+
 export function useAppointment() {
-  const context = useContext(AppointmentContext)
+  const context = useContext(AppointmentContext);
   if (context === undefined) {
-    throw new Error('useAppointment deve ser usado dentro de um AppointmentProvider')
+    throw new Error('useAppointment must be used within an AppointmentProvider');
   }
-  return context
+  return context;
 }
 
 // Simulação de banco de dados (em um cenário real, seria uma API)
@@ -117,29 +115,4 @@ const removeFromDatabase = async (id: number) => {
     console.error('Erro ao remover do banco de dados:', error);
     return false;
   }
-}
-
-// Provedor do contexto
-export function AppointmentProvider({ children }: { children: ReactNode }) {
-  const [appointmentData, setAppointmentDataState] = useState<AppointmentData | null>(null);
-
-  const setAppointmentData = (data: AppointmentData) => {
-    setAppointmentDataState(data);
-  };
-
-  const clearAppointmentData = () => {
-    setAppointmentDataState(null);
-  };
-
-  return (
-    <AppointmentContext.Provider
-      value={{
-        appointmentData,
-        setAppointmentData,
-        clearAppointmentData,
-      }}
-    >
-      {children}
-    </AppointmentContext.Provider>
-  )
 } 
