@@ -15,9 +15,15 @@ export default function AdminLogin() {
     console.log('Login - Status:', status);
     console.log('Login - Session:', session);
 
+    // Se ainda está carregando, não faz nada
+    if (status === 'loading') {
+      console.log('Status ainda carregando, aguardando...');
+      return;
+    }
+
     if (status === 'authenticated' && session?.user?.role === 'admin') {
       console.log('Usuário admin já autenticado, redirecionando para dashboard');
-      router.push('/admin/dashboard');
+      router.replace('/admin/dashboard');
     }
   }, [status, session, router]);
 
@@ -36,18 +42,21 @@ export default function AdminLogin() {
       const result = await signIn('credentials', {
         email,
         password,
-        redirect: false,
-        callbackUrl: '/admin/dashboard'
+        redirect: false
       });
 
       console.log('Resultado do login:', result);
 
       if (result?.error) {
         console.error('Erro no login:', result.error);
-        setError('Email ou senha inválidos');
+        if (result.error === 'Acesso não autorizado') {
+          setError('Você não tem permissão para acessar esta área');
+        } else {
+          setError('Email ou senha inválidos');
+        }
       } else if (result?.ok) {
-        console.log('Login bem-sucedido, redirecionando...');
-        router.push('/admin/dashboard');
+        console.log('Login bem-sucedido, aguardando sessão...');
+        // O redirecionamento será feito pelo useEffect quando a sessão for atualizada
       } else {
         console.error('Erro desconhecido no login');
         setError('Ocorreu um erro ao fazer login');
