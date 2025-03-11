@@ -33,6 +33,15 @@ interface Appointment {
   service: Service;
 }
 
+interface AppointmentData {
+  name: string;
+  service: string;
+  date: string;
+  time: string;
+  vehicle: string;
+  message?: string;
+}
+
 interface AppointmentContextType {
   selectedDate: Date | null;
   setSelectedDate: (date: Date | null) => void;
@@ -40,6 +49,8 @@ interface AppointmentContextType {
   setSelectedService: (service: Service | null) => void;
   appointments: Appointment[];
   setAppointments: (appointments: Appointment[]) => void;
+  appointmentData: AppointmentData | null;
+  setAppointmentData: (data: AppointmentData | null) => void;
 }
 
 const AppointmentContext = createContext<AppointmentContextType | undefined>(undefined);
@@ -48,6 +59,7 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointmentData, setAppointmentData] = useState<AppointmentData | null>(null);
 
   return (
     <AppointmentContext.Provider
@@ -58,6 +70,8 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
         setSelectedService,
         appointments,
         setAppointments,
+        appointmentData,
+        setAppointmentData,
       }}
     >
       {children}
@@ -76,17 +90,14 @@ export function useAppointment() {
 // Simulação de banco de dados (em um cenário real, seria uma API)
 const saveToDatabase = async (appointment: Appointment) => {
   try {
-    // Em um cenário real, aqui seria uma chamada à API para salvar no banco de dados
     console.log('Salvando no banco de dados:', appointment);
     
-    // Simulando uma chamada de API com localStorage
     const existingData = localStorage.getItem('appointmentsDatabase') || '[]';
     const database = JSON.parse(existingData);
     
-    // Garantir que a data seja salva como string ISO
+    // A data já é uma string, não precisa converter
     const appointmentToSave = {
-      ...appointment,
-      date: appointment.date.toISOString()
+      ...appointment
     };
     
     database.push(appointmentToSave);
