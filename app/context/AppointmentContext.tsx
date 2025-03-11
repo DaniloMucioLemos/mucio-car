@@ -51,6 +51,7 @@ interface AppointmentContextType {
   setAppointments: (appointments: Appointment[]) => void;
   appointmentData: AppointmentData | null;
   setAppointmentData: (data: AppointmentData | null) => void;
+  clearAppointmentData: () => void;
 }
 
 const AppointmentContext = createContext<AppointmentContextType | undefined>(undefined);
@@ -60,6 +61,12 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [appointmentData, setAppointmentData] = useState<AppointmentData | null>(null);
+
+  const clearAppointmentData = () => {
+    setAppointmentData(null);
+    setSelectedDate(null);
+    setSelectedService(null);
+  };
 
   return (
     <AppointmentContext.Provider
@@ -72,6 +79,7 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
         setAppointments,
         appointmentData,
         setAppointmentData,
+        clearAppointmentData,
       }}
     >
       {children}
