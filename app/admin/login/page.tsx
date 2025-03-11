@@ -1,14 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLogin() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    console.log('Login - Status:', status);
+    console.log('Login - Session:', session);
+
+    if (status === 'authenticated') {
+      console.log('Usuário já autenticado, redirecionando para dashboard');
+      router.push('/admin/dashboard');
+    }
+  }, [status, session, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,6 +30,8 @@ export default function AdminLogin() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
+    console.log('Tentando login com email:', email);
+
     try {
       const result = await signIn('credentials', {
         redirect: false,
@@ -26,17 +39,30 @@ export default function AdminLogin() {
         password,
       });
 
+      console.log('Resultado do login:', result);
+
       if (result?.error) {
+        console.error('Erro no login:', result.error);
         setError('Email ou senha inválidos');
       } else {
+        console.log('Login bem-sucedido, redirecionando...');
         router.push('/admin/dashboard');
       }
     } catch (error) {
+      console.error('Erro ao fazer login:', error);
       setError('Ocorreu um erro ao fazer login');
     } finally {
       setLoading(false);
     }
   };
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl">Carregando...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

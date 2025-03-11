@@ -14,10 +14,36 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (status === 'unauthenticated' && pathname !== '/admin/login') {
-      router.push('/admin/login');
+    console.log('AdminLayout - Status:', status);
+    console.log('AdminLayout - Session:', session);
+    console.log('AdminLayout - Pathname:', pathname);
+
+    if (pathname === '/admin/login') {
+      if (status === 'authenticated') {
+        console.log('Usuário autenticado, redirecionando para dashboard');
+        router.push('/admin/dashboard');
+      }
+      return;
     }
-  }, [status, router, pathname]);
+
+    if (status === 'unauthenticated') {
+      console.log('Usuário não autenticado, redirecionando para login');
+      router.push('/admin/login');
+      return;
+    }
+
+    if (status === 'authenticated' && !session?.user?.role) {
+      console.log('Usuário sem role definida');
+      router.push('/admin/login');
+      return;
+    }
+
+    if (status === 'authenticated' && session?.user?.role !== 'admin') {
+      console.log('Usuário não é admin');
+      router.push('/admin/login');
+      return;
+    }
+  }, [status, session, router, pathname]);
 
   if (status === 'loading') {
     return (
@@ -27,7 +53,7 @@ export default function AdminLayout({
     );
   }
 
-  if (status === 'unauthenticated' && pathname !== '/admin/login') {
+  if (pathname !== '/admin/login' && status !== 'authenticated') {
     return null;
   }
 
