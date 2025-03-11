@@ -35,6 +35,8 @@ interface Appointment {
 
 interface AppointmentData {
   name: string;
+  email: string;
+  phone: string;
   service: string;
   date: string;
   time: string;
