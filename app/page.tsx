@@ -80,29 +80,25 @@ export default function Home() {
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Carrossel de Imagens */}
         <div className="absolute inset-0 z-0">
           <Image 
             src="/images/cars/classic-car-1.jpg" 
             alt="Mucio Car - Estética Automotiva" 
             fill 
-            priority={false}
             loading="eager"
+            fetchPriority="high"
             sizes="100vw"
             style={{objectFit: 'cover'}}
             className="w-full h-full object-cover brightness-[0.3]"
           />
         </div>
 
-        {/* Carrossel de Imagens */}
+        {/* Thumbnails */}
         <div className="absolute top-1/4 left-0 right-0 z-10">
           <div className="container mx-auto px-4">
             <ImageCarousel 
               images={[
-                {
-                  src: "/images/cars/classic-car-1.jpg",
-                  alt: "Carro clássico restaurado",
-                  priority: true
-                },
                 {
                   src: "/images/cars/classic-car-2.jpg",
                   alt: "Detalhes da restauração"
