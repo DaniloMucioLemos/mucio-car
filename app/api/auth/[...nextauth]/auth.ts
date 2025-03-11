@@ -3,6 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET must be set');
+}
+
+if (!process.env.NEXTAUTH_URL) {
+  throw new Error('NEXTAUTH_URL must be set');
+}
+
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
@@ -50,7 +58,7 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error) {
           console.error('Erro na autenticação:', error);
-          throw new Error('Erro ao autenticar usuário');
+          throw error;
         } finally {
           await prisma.$disconnect();
         }
