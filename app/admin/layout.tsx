@@ -18,6 +18,7 @@ export default function AdminLayout({
     console.log('AdminLayout - Status:', status);
     console.log('AdminLayout - Session:', session);
     console.log('AdminLayout - Pathname:', pathname);
+    console.log('AdminLayout - IsRedirecting:', isRedirecting);
 
     // Se ainda está carregando ou já está redirecionando, não faz nada
     if (status === 'loading' || isRedirecting) {
@@ -26,6 +27,7 @@ export default function AdminLayout({
     }
 
     const handleRedirect = async () => {
+      console.log('Iniciando handleRedirect');
       setIsRedirecting(true);
 
       try {
@@ -34,6 +36,7 @@ export default function AdminLayout({
           if (status === 'authenticated' && session?.user?.role === 'admin') {
             console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
             await router.replace('/admin/dashboard');
+            return;
           }
           return;
         }
@@ -52,7 +55,10 @@ export default function AdminLayout({
             return;
           }
         }
+      } catch (error) {
+        console.error('Erro durante redirecionamento:', error);
       } finally {
+        console.log('Finalizando handleRedirect');
         setIsRedirecting(false);
       }
     };

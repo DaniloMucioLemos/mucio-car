@@ -18,7 +18,7 @@ export default function AdminLogin() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    console.log('Tentando login com email:', email);
+    console.log('Iniciando tentativa de login com email:', email);
 
     try {
       const result = await signIn('credentials', {
@@ -37,7 +37,7 @@ export default function AdminLogin() {
           setError('Email ou senha inválidos');
         }
       } else if (result?.ok) {
-        console.log('Login bem-sucedido, aguardando sessão...');
+        console.log('Login bem-sucedido, aguardando atualização da sessão...');
         // O redirecionamento será feito pelo layout quando a sessão for atualizada
       } else {
         console.error('Erro desconhecido no login');
@@ -51,11 +51,20 @@ export default function AdminLogin() {
     }
   };
 
-  // Se estiver carregando, mostra o loading
+  // Se estiver carregando a sessão, mostra o loading
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-xl">Carregando...</div>
+        <div className="text-xl">Verificando sessão...</div>
+      </div>
+    );
+  }
+
+  // Se já estiver autenticado como admin, mostra mensagem de redirecionamento
+  if (status === 'authenticated') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl">Redirecionando para o painel...</div>
       </div>
     );
   }
@@ -88,6 +97,7 @@ export default function AdminLogin() {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email"
+                disabled={loading}
               />
             </div>
             <div>
@@ -102,6 +112,7 @@ export default function AdminLogin() {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Senha"
+                disabled={loading}
               />
             </div>
           </div>
