@@ -21,10 +21,16 @@ export default function AdminLogin() {
       return;
     }
 
-    if (status === 'authenticated' && session?.user?.role === 'admin') {
-      console.log('Usuário admin já autenticado, redirecionando para dashboard');
-      router.replace('/admin/dashboard');
-    }
+    const handleRedirect = async () => {
+      if (status === 'authenticated' && session?.user?.role === 'admin') {
+        console.log('Usuário admin já autenticado, redirecionando para dashboard');
+        await router.push('/admin/dashboard');
+      }
+    };
+
+    // Adiciona um pequeno delay para garantir que a sessão esteja atualizada
+    const timeoutId = setTimeout(handleRedirect, 100);
+    return () => clearTimeout(timeoutId);
   }, [status, session, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,10 +75,20 @@ export default function AdminLogin() {
     }
   };
 
+  // Se estiver carregando, mostra o loading
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-xl">Carregando...</div>
+      </div>
+    );
+  }
+
+  // Se já estiver autenticado como admin, não mostra o formulário
+  if (status === 'authenticated' && session?.user?.role === 'admin') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-xl">Redirecionando...</div>
       </div>
     );
   }

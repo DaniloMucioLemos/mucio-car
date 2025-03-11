@@ -24,29 +24,35 @@ export default function AdminLayout({
       return;
     }
 
-    // Se estiver na página de login
-    if (pathname === '/admin/login') {
-      if (status === 'authenticated' && session?.user?.role === 'admin') {
-        console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
-        router.replace('/admin/dashboard');
-      }
-      return;
-    }
-
-    // Se não estiver na página de login
-    if (status === 'unauthenticated') {
-      console.log('Usuário não autenticado, redirecionando para login');
-      router.replace('/admin/login');
-      return;
-    }
-
-    if (status === 'authenticated') {
-      if (!session?.user?.role || session.user.role !== 'admin') {
-        console.log('Usuário autenticado mas não é admin');
-        router.replace('/admin/login');
+    const handleRedirect = async () => {
+      // Se estiver na página de login
+      if (pathname === '/admin/login') {
+        if (status === 'authenticated' && session?.user?.role === 'admin') {
+          console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
+          await router.push('/admin/dashboard');
+        }
         return;
       }
-    }
+
+      // Se não estiver na página de login
+      if (status === 'unauthenticated') {
+        console.log('Usuário não autenticado, redirecionando para login');
+        await router.push('/admin/login');
+        return;
+      }
+
+      if (status === 'authenticated') {
+        if (!session?.user?.role || session.user.role !== 'admin') {
+          console.log('Usuário autenticado mas não é admin');
+          await router.push('/admin/login');
+          return;
+        }
+      }
+    };
+
+    // Adiciona um pequeno delay para garantir que a sessão esteja atualizada
+    const timeoutId = setTimeout(handleRedirect, 100);
+    return () => clearTimeout(timeoutId);
   }, [status, session, router, pathname]);
 
   // Mostra loading apenas se estiver carregando
