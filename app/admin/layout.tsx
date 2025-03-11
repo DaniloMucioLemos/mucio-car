@@ -31,32 +31,30 @@ export default function AdminLayout({
       setIsRedirecting(true);
 
       try {
-        // Se estiver na página de login
-        if (pathname === '/admin/login') {
-          if (status === 'authenticated' && session?.user?.role === 'admin') {
-            console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
-            await router.replace('/admin/dashboard');
+        // Se estiver autenticado como admin
+        if (status === 'authenticated' && session?.user?.role === 'admin') {
+          // Se estiver na página de login, redireciona para o dashboard
+          if (pathname === '/admin/login') {
+            console.log('Usuário admin na página de login, redirecionando para dashboard');
+            window.location.href = '/admin/dashboard';
             return;
           }
+          // Se estiver em qualquer outra página, permite o acesso
           return;
         }
 
-        // Se não estiver na página de login
-        if (status === 'unauthenticated') {
-          console.log('Usuário não autenticado, redirecionando para login');
-          await router.replace('/admin/login');
+        // Se não estiver autenticado ou não for admin
+        if (pathname !== '/admin/login') {
+          console.log('Usuário não autorizado, redirecionando para login');
+          window.location.href = '/admin/login';
           return;
-        }
-
-        if (status === 'authenticated') {
-          if (!session?.user?.role || session.user.role !== 'admin') {
-            console.log('Usuário autenticado mas não é admin');
-            await router.replace('/admin/login');
-            return;
-          }
         }
       } catch (error) {
         console.error('Erro durante redirecionamento:', error);
+        // Em caso de erro, força o redirecionamento para o login
+        if (pathname !== '/admin/login') {
+          window.location.href = '/admin/login';
+        }
       } finally {
         console.log('Finalizando handleRedirect');
         setIsRedirecting(false);
@@ -64,7 +62,7 @@ export default function AdminLayout({
     };
 
     handleRedirect();
-  }, [status, session, router, pathname, isRedirecting]);
+  }, [status, session, pathname]);
 
   // Mostra loading durante carregamento ou redirecionamento
   if (status === 'loading' || isRedirecting) {
