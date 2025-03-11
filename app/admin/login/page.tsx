@@ -34,24 +34,15 @@ export default function AdminLogin() {
 
     try {
       const result = await signIn('credentials', {
-        redirect: false,
         email,
         password,
+        callbackUrl: '/admin/dashboard'
       });
 
       console.log('Resultado do login:', result);
-
-      if (result?.error) {
-        console.error('Erro no login:', result.error);
-        setError('Email ou senha inválidos');
-      } else {
-        console.log('Login bem-sucedido, redirecionando...');
-        router.push('/admin/dashboard');
-      }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Ocorreu um erro ao fazer login');
-    } finally {
       setLoading(false);
     }
   };

@@ -13,3 +13,5 @@ export DATABASE_URL="$1"
 # Executa o script com a DATABASE_URL de produção
 echo "Executando script com DATABASE_URL de produção..."
 npx tsx scripts/create-admin.ts 
+
+./scripts/deploy-db.sh 'postgresql://neondb_owner:npg_VgNeME4j9AQO@ep-mute-scene-a8h6ekc7-pooler.eastus2.azure.neon.tech/neondb?sslmode=require' 
