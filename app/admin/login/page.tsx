@@ -15,8 +15,8 @@ export default function AdminLogin() {
     console.log('Login - Status:', status);
     console.log('Login - Session:', session);
 
-    if (status === 'authenticated') {
-      console.log('Usuário já autenticado, redirecionando para dashboard');
+    if (status === 'authenticated' && session?.user?.role === 'admin') {
+      console.log('Usuário admin já autenticado, redirecionando para dashboard');
       router.push('/admin/dashboard');
     }
   }, [status, session, router]);
@@ -36,13 +36,26 @@ export default function AdminLogin() {
       const result = await signIn('credentials', {
         email,
         password,
+        redirect: false,
         callbackUrl: '/admin/dashboard'
       });
 
       console.log('Resultado do login:', result);
+
+      if (result?.error) {
+        console.error('Erro no login:', result.error);
+        setError('Email ou senha inválidos');
+      } else if (result?.ok) {
+        console.log('Login bem-sucedido, redirecionando...');
+        router.push('/admin/dashboard');
+      } else {
+        console.error('Erro desconhecido no login');
+        setError('Ocorreu um erro ao fazer login');
+      }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setError('Ocorreu um erro ao fazer login');
+    } finally {
       setLoading(false);
     }
   };

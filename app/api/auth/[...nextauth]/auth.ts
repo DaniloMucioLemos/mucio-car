@@ -23,10 +23,12 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log('Credenciais não fornecidas');
           throw new Error('Credenciais inválidas');
         }
 
         try {
+          console.log('Buscando usuário:', credentials.email);
           const user = await prisma.user.findUnique({
             where: {
               email: credentials.email
@@ -34,6 +36,7 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!user || !user?.hashedPassword) {
+            console.log('Usuário não encontrado');
             throw new Error('Usuário não encontrado');
           }
 
@@ -43,13 +46,16 @@ export const authOptions: NextAuthOptions = {
           );
 
           if (!isCorrectPassword) {
+            console.log('Senha incorreta');
             throw new Error('Senha incorreta');
           }
 
           if (user.role !== 'admin') {
+            console.log('Usuário não é admin');
             throw new Error('Acesso não autorizado');
           }
 
+          console.log('Login bem-sucedido:', user.email);
           return {
             id: user.id,
             email: user.email,
@@ -67,6 +73,9 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      console.log('JWT Callback - Token:', token);
+      console.log('JWT Callback - User:', user);
+      
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -74,6 +83,9 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      console.log('Session Callback - Session:', session);
+      console.log('Session Callback - Token:', token);
+      
       if (session?.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
@@ -90,5 +102,5 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 24 * 60 * 60, // 30 dias
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development',
+  debug: true
 }; 

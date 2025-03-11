@@ -18,34 +18,41 @@ export default function AdminLayout({
     console.log('AdminLayout - Session:', session);
     console.log('AdminLayout - Pathname:', pathname);
 
+    // Se estiver na página de login
     if (pathname === '/admin/login') {
-      if (status === 'authenticated') {
-        console.log('Usuário autenticado, redirecionando para dashboard');
+      if (status === 'authenticated' && session?.user?.role === 'admin') {
+        console.log('Usuário admin autenticado na página de login, redirecionando para dashboard');
         router.push('/admin/dashboard');
       }
       return;
     }
 
+    // Se não estiver na página de login
     if (status === 'unauthenticated') {
       console.log('Usuário não autenticado, redirecionando para login');
       router.push('/admin/login');
       return;
     }
 
-    if (status === 'authenticated' && !session?.user?.role) {
-      console.log('Usuário sem role definida');
-      router.push('/admin/login');
-      return;
-    }
+    if (status === 'authenticated') {
+      if (!session?.user?.role) {
+        console.log('Usuário autenticado mas sem role definida');
+        router.push('/admin/login');
+        return;
+      }
 
-    if (status === 'authenticated' && session?.user?.role !== 'admin') {
-      console.log('Usuário não é admin');
-      router.push('/admin/login');
-      return;
+      if (session.user.role !== 'admin') {
+        console.log('Usuário autenticado mas não é admin');
+        router.push('/admin/login');
+        return;
+      }
+
+      console.log('Usuário admin autenticado com sucesso');
     }
   }, [status, session, router, pathname]);
 
-  if (status === 'loading') {
+  // Mostra loading apenas se estiver carregando e não estiver na página de login
+  if (status === 'loading' && pathname !== '/admin/login') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-xl">Carregando...</div>
@@ -53,9 +60,11 @@ export default function AdminLayout({
     );
   }
 
-  if (pathname !== '/admin/login' && status !== 'authenticated') {
+  // Se não estiver na página de login e não estiver autenticado como admin, não renderiza nada
+  if (pathname !== '/admin/login' && (!session?.user?.role || session.user.role !== 'admin')) {
     return null;
   }
 
+  // Renderiza o conteúdo normalmente
   return <>{children}</>;
 } 
