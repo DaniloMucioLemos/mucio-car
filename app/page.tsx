@@ -85,7 +85,9 @@ export default function Home() {
             src="/images/cars/classic-car-1.jpg" 
             alt="Mucio Car - Estética Automotiva" 
             fill 
-            priority
+            priority={false}
+            loading="eager"
+            sizes="100vw"
             style={{objectFit: 'cover'}}
             className="w-full h-full object-cover brightness-[0.3]"
           />
@@ -98,7 +100,8 @@ export default function Home() {
               images={[
                 {
                   src: "/images/cars/classic-car-1.jpg",
-                  alt: "Carro clássico restaurado"
+                  alt: "Carro clássico restaurado",
+                  priority: true
                 },
                 {
                   src: "/images/cars/classic-car-2.jpg",

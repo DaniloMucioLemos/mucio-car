@@ -12,6 +12,7 @@ interface ImageCarouselProps {
   images: {
     src: string;
     alt: string;
+    priority?: boolean;
   }[];
 }
 
@@ -52,6 +53,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
                   src={image.src}
                   alt={image.alt}
                   fill
+                  priority={image.priority}
                   className="object-cover transition-transform duration-300 hover:scale-110"
                 />
               </div>
